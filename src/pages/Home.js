@@ -32,7 +32,7 @@ function Home() {
         </Paragraph>
         <Spacer></Spacer>
         <CallToActionButton onClick={() => navigate("/Connect")}>
-          Let's Connectss
+          Let's Connectt
         </CallToActionButton>
         <StickyFooter>
           <Clients></Clients>
