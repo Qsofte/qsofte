@@ -30,9 +30,9 @@ jobs:
       # Step 5: Deploy to Remote Server
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-          docker pull your-docker-image-name:latest
-          docker stop your-container-name || true
-          docker rm your-container-name || true
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          docker pull ashutoshqsofte/qsofte:latest
+          docker stop qsofte-container || true
+          docker rm qsofte-container || true
           docker run -d --name your-container-name -p 8443:5000 ashutoshqsofte/qsofte:latest
           EOF
