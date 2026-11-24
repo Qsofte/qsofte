@@ -1,9 +1,4 @@
 // All website copy lives here, so content changes never touch layout code.
-import consultancy from './assets/services/consultancy.webp';
-import pos from './assets/services/pos.webp';
-import webdev from './assets/services/webdevelopment.webp';
-import openemr from './assets/services/openemr.webp';
-import testing from './assets/services/testing.webp';
 import westpac from './assets/clients/westpac.webp';
 import chilliMasala from './assets/clients/chilli-masala.webp';
 import adyopant from './assets/clients/adyopant-legal.webp';
@@ -20,18 +15,85 @@ export const company = {
 };
 
 export const hero = {
-  eyebrow: 'Software & technology partner · Porirua, New Zealand',
-  title: 'Technology that works as hard as your business.',
+  eyebrow: 'Qsofte · Porirua, New Zealand',
+  title: 'Software, thoughtfully made.',
   lead:
-    'Qsofte designs, builds and supports software for retailers, healthcare practices and growing businesses, from the first strategy conversation through launch and beyond.',
+    'We design, build and look after software for retailers, healthcare practices and growing businesses, from the first conversation to launch and beyond.',
+  primary: 'Start a conversation',
+  secondary: 'Explore services',
 };
+
+export const home = {
+  clientsLabel: 'Trusted by',
+  servicesEyebrow: 'What we do',
+  servicesTitle: 'Everything your software needs. Nothing it doesn’t.',
+  valuesEyebrow: 'Why Qsofte',
+  valuesTitle: 'Simple to work with. Built to last.',
+  processEyebrow: 'How we work',
+  processTitle: 'Four steps. No surprises.',
+  more: 'Learn more',
+};
+
+export const servicesPage = {
+  title: 'Services',
+  lead: 'Choose one service or bring us in end to end. Either way, you get a senior team that cares about the outcome.',
+};
+
+export const contactPage = {
+  title: 'Let’s talk.',
+  lead: 'Tell us a little about your project and we’ll get back to you.',
+  formLabel: 'Contact form',
+  fields: {
+    name: 'Name',
+    email: 'Email',
+    phone: 'Phone (optional)',
+    company: 'Company (optional)',
+    message: 'How can we help?',
+  },
+  submit: 'Send message',
+  sending: 'Sending…',
+  sentTitle: 'Thank you.',
+  sentText: 'Your message is on its way. We’ll be in touch soon.',
+  error: 'Something went wrong. Please email us at',
+  labels: { email: 'Email', phone: 'Phone', office: 'Office' },
+};
+
+export const callToAction = {
+  title: 'Have something in mind?',
+  text: 'Tell us what you’re trying to achieve. We’ll come back with ideas and next steps.',
+  action: 'Start a conversation',
+};
+
+export const notFound = {
+  title: 'This page doesn’t exist.',
+  text: 'It may have moved.',
+  action: 'Back to home',
+};
+
+export const footer = {
+  blurb: 'Software and technology partner, based in Porirua, New Zealand.',
+  servicesHeading: 'Services',
+  companyHeading: 'Company',
+  rights: 'All rights reserved.',
+};
+
+export const a11y = {
+  skipToContent: 'Skip to content',
+};
+
+export const nav = [
+  { to: '/services', label: 'Services' },
+  { to: '/contact', label: 'Contact' },
+];
+
+export type ServiceIcon = 'compass' | 'terminal' | 'devices' | 'pulse' | 'check';
 
 export type Service = {
   slug: string;
   title: string;
   summary: string;
   points: string[];
-  image: string;
+  icon: ServiceIcon;
 };
 
 export const services: Service[] = [
@@ -46,7 +108,7 @@ export const services: Service[] = [
       'Architecture, security and cloud reviews',
       'Hands-on guidance all the way through delivery',
     ],
-    image: consultancy,
+    icon: 'compass',
   },
   {
     slug: 'retail-pos',
@@ -59,7 +121,7 @@ export const services: Service[] = [
       'Integrations with payments, accounting and e-commerce',
       'Scales with you as you open new locations',
     ],
-    image: pos,
+    icon: 'terminal',
   },
   {
     slug: 'web-and-apps',
@@ -72,7 +134,7 @@ export const services: Service[] = [
       'Performance, accessibility and SEO built in',
       'Hosting, monitoring and ongoing support',
     ],
-    image: webdev,
+    icon: 'devices',
   },
   {
     slug: 'openemr',
@@ -85,7 +147,7 @@ export const services: Service[] = [
       'Secure, compliant handling of patient information',
       'Staff training and ongoing support',
     ],
-    image: openemr,
+    icon: 'pulse',
   },
   {
     slug: 'testing',
@@ -98,7 +160,7 @@ export const services: Service[] = [
       'Performance and security testing',
       'Usability and accessibility reviews',
     ],
-    image: testing,
+    icon: 'check',
   },
 ];
 

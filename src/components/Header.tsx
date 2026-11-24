@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import logo from '../assets/qsofte-logo.webp';
+import { nav } from '../content';
+import './Header.css';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -12,10 +14,10 @@ export default function Header() {
     <header className="site-header">
       <div className="container site-header__inner">
         <Link to="/" className="site-header__logo" aria-label="Qsofte home">
-          <img src={logo} alt="Qsofte" width={177} height={34} />
+          <img src={logo} alt="Qsofte" width={146} height={28} />
         </Link>
         <button
-          className="menu-toggle"
+          className="site-header__toggle"
           aria-label="Menu"
           aria-expanded={open}
           aria-controls="site-nav"
@@ -23,17 +25,17 @@ export default function Header() {
         >
           <span />
           <span />
-          <span />
         </button>
-        <nav id="site-nav" className={`site-nav${open ? ' is-open' : ''}`} aria-label="Main">
-          <NavLink to="/" end>
-            Home
-          </NavLink>
-          <NavLink to="/services">Services</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
-          <Link to="/contact" className="btn btn--dark">
-            Let&rsquo;s talk
-          </Link>
+        <nav
+          id="site-nav"
+          className={`site-header__nav${open ? ' site-header__nav--open' : ''}`}
+          aria-label="Main"
+        >
+          {nav.map((item) => (
+            <NavLink key={item.to} to={item.to}>
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
       </div>
     </header>

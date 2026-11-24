@@ -44,6 +44,6 @@ describe('site', () => {
 
   it('unknown pages show a 404', () => {
     renderAt('/nope');
-    expect(screen.getByText(/couldn.t find that page/)).toBeTruthy();
+    expect(screen.getByText(/doesn.t exist/)).toBeTruthy();
   });
 });

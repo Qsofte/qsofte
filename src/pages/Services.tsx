@@ -1,33 +1,31 @@
 import CallToAction from '../components/CallToAction';
-import { services } from '../content';
+import Icon from '../components/Icon';
+import { services, servicesPage } from '../content';
 import { usePageTitle } from '../usePageTitle';
+import './Services.css';
 
 export default function Services() {
-  usePageTitle('Services');
+  usePageTitle(servicesPage.title);
   return (
-    <>
-      <section className="hero hero--page">
+    <div className="services-page">
+      <section className="services-page__hero">
         <div className="container">
-          <span className="eyebrow">Services</span>
-          <h1>Everything you need to plan, build and run great software</h1>
-          <p className="hero__lead">
-            Pick a single service or bring us in end to end. Either way, you get a senior team that
-            cares about the outcome.
-          </p>
+          <h1 className="display">{servicesPage.title}</h1>
+          <p className="lead">{servicesPage.lead}</p>
         </div>
       </section>
 
-      <section className="section">
+      <section className="services-page__list">
         <div className="container">
           {services.map((s) => (
-            <article key={s.slug} id={s.slug} className="service-detail">
-              <div className="service-detail__media">
-                <img src={s.image} alt="" loading="lazy" />
+            <article key={s.slug} id={s.slug} className="services-page__item">
+              <div className="services-page__title">
+                <Icon name={s.icon} size={32} />
+                <h2>{s.title}</h2>
               </div>
               <div>
-                <h2>{s.title}</h2>
-                <p className="service-detail__summary">{s.summary}</p>
-                <ul className="checklist">
+                <p className="services-page__summary">{s.summary}</p>
+                <ul>
                   {s.points.map((p) => (
                     <li key={p}>{p}</li>
                   ))}
@@ -39,6 +37,6 @@ export default function Services() {
       </section>
 
       <CallToAction />
-    </>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
-import { company } from '../content';
+import { company, contactPage as copy } from '../content';
 import { usePageTitle } from '../usePageTitle';
+import './Contact.css';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
@@ -24,96 +25,77 @@ export default function Contact() {
   }
 
   return (
-    <>
-      <section className="hero hero--page">
-        <div className="container">
-          <span className="eyebrow">Contact</span>
-          <h1>Let&rsquo;s build something great together</h1>
-          <p className="hero__lead">
-            Tell us a little about your project or challenge and we&rsquo;ll get back to you.
-          </p>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container contact-grid">
-          <dl className="contact-details">
+    <div className="contact-page">
+      <section className="container contact-page__grid">
+        <div className="contact-page__intro">
+          <h1 className="display">{copy.title}</h1>
+          <p className="lead">{copy.lead}</p>
+          <dl>
             <div>
-              <dt>Email</dt>
+              <dt>{copy.labels.email}</dt>
               <dd>
                 <a href={`mailto:${company.email}`}>{company.email}</a>
               </dd>
             </div>
             <div>
-              <dt>Phone</dt>
+              <dt>{copy.labels.phone}</dt>
               <dd>
                 <a href={company.phoneHref}>{company.phone}</a>
               </dd>
             </div>
             <div>
-              <dt>Office</dt>
-              <dd>
-                {company.address.map((line) => (
-                  <span key={line}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </dd>
+              <dt>{copy.labels.office}</dt>
+              <dd>{company.address.join(', ')}</dd>
             </div>
           </dl>
-
-          {status === 'sent' ? (
-            <div className="form form-success" role="status">
-              <h2>Thanks, message received!</h2>
-              <p>We&rsquo;ll be in touch soon.</p>
-            </div>
-          ) : (
-            <form
-              className="form"
-              action={company.formEndpoint}
-              method="POST"
-              onSubmit={onSubmit}
-              aria-label="Contact form"
-            >
-              <div className="form__row">
-                <div className="field">
-                  <label htmlFor="name">Name</label>
-                  <input id="name" name="name" autoComplete="name" required />
-                </div>
-                <div className="field">
-                  <label htmlFor="email">Email</label>
-                  <input id="email" name="email" type="email" autoComplete="email" required />
-                </div>
-              </div>
-              <div className="form__row">
-                <div className="field">
-                  <label htmlFor="phone">Phone (optional)</label>
-                  <input id="phone" name="phone" type="tel" autoComplete="tel" />
-                </div>
-                <div className="field">
-                  <label htmlFor="company">Company (optional)</label>
-                  <input id="company" name="company" autoComplete="organization" />
-                </div>
-              </div>
-              <div className="field">
-                <label htmlFor="message">How can we help?</label>
-                <textarea id="message" name="message" required />
-              </div>
-              {status === 'error' && (
-                <p className="form__status form__status--error" role="alert">
-                  Sorry, something went wrong. Please email us at {company.email}.
-                </p>
-              )}
-              <div>
-                <button className="btn btn--dark" type="submit" disabled={status === 'sending'}>
-                  {status === 'sending' ? 'Sending…' : 'Send message'}
-                </button>
-              </div>
-            </form>
-          )}
         </div>
+
+        {status === 'sent' ? (
+          <div className="contact-page__sent" role="status">
+            <h2 className="headline">{copy.sentTitle}</h2>
+            <p className="lead">{copy.sentText}</p>
+          </div>
+        ) : (
+          <form
+            className="contact-page__form"
+            action={company.formEndpoint}
+            method="POST"
+            onSubmit={onSubmit}
+            aria-label={copy.formLabel}
+          >
+            <div className="contact-page__field">
+              <label htmlFor="name">{copy.fields.name}</label>
+              <input id="name" name="name" autoComplete="name" required />
+            </div>
+            <div className="contact-page__field">
+              <label htmlFor="email">{copy.fields.email}</label>
+              <input id="email" name="email" type="email" autoComplete="email" required />
+            </div>
+            <div className="contact-page__row">
+              <div className="contact-page__field">
+                <label htmlFor="phone">{copy.fields.phone}</label>
+                <input id="phone" name="phone" type="tel" autoComplete="tel" />
+              </div>
+              <div className="contact-page__field">
+                <label htmlFor="company">{copy.fields.company}</label>
+                <input id="company" name="company" autoComplete="organization" />
+              </div>
+            </div>
+            <div className="contact-page__field">
+              <label htmlFor="message">{copy.fields.message}</label>
+              <textarea id="message" name="message" rows={5} required />
+            </div>
+            {status === 'error' && (
+              <p className="contact-page__error" role="alert">
+                {copy.error} {company.email}.
+              </p>
+            )}
+            <button className="btn btn--primary" type="submit" disabled={status === 'sending'}>
+              {status === 'sending' ? copy.sending : copy.submit}
+            </button>
+          </form>
+        )}
       </section>
-    </>
+    </div>
   );
 }
