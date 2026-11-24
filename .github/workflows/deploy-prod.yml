@@ -1,0 +1,76 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy" to confirm a production deployment'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+env:
+  DOMAIN: ${{ vars.PROD_DOMAIN || 'qsofte.com' }}
+  SSL_EMAIL: ${{ vars.SSL_EMAIL || 'admin@qsofte.com' }}
+
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require confirmation for manual runs
+        if: github.event_name == 'workflow_dispatch' && inputs.confirm != 'deploy'
+        run: |
+          echo "Cancelled: type 'deploy' to confirm."
+          exit 1
+      - run: echo "Deploying ${{ github.ref_name }} @ ${{ github.sha }} to $DOMAIN"
+
+  checks:
+    needs: confirm
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+
+      - name: Ship release and deploy
+        env:
+          SSHPASS: ${{ secrets.SERVER_PASSWORD }}
+          TARGET: ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+        run: |
+          REL=/opt/qsofte/releases/${GITHUB_SHA}
+          ssh_() { sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 "$TARGET" "$@"; }
+          # Prefix for privileged commands when the deploy user is not root
+          PRIV='S=""; [ "$(id -u)" -ne 0 ] && S="sudo -n";'
+          ssh_ "$PRIV \$S mkdir -p $REL && \$S chown \"\$(id -un)\" $REL"
+          git archive --format=tar HEAD | ssh_ "tar -x -C $REL"
+          ssh_ "cd $REL && DOMAIN='$DOMAIN' SSL_EMAIL='$SSL_EMAIL' bash deploy/deploy.sh"
+
+      - name: Verify HTTPS and certificate
+        run: |
+          for i in $(seq 1 12); do curl -fsS "https://$DOMAIN/healthz" && break; sleep 5; done
+          curl -fsS "https://$DOMAIN/healthz"
+          echo | openssl s_client -connect "$DOMAIN:443" -servername "$DOMAIN" 2>/dev/null \
+            | openssl x509 -noout -subject -enddate -checkend 1209600
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Smoke test the live site
+        env:
+          BASE_URL: https://${{ env.DOMAIN }}
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test --trace off
