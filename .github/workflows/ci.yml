@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_call:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Typecheck, unit tests, build
+        run: npm run check
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+      - name: End-to-end tests (desktop + mobile)
+        run: npx playwright test --trace off
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build production image
+        run: docker build -t qsofte-web:ci .
+      - name: Smoke test image (HTTP mode, no cert)
+        run: |
+          docker run -d --name web -e DOMAIN=localhost -p 8080:80 qsofte-web:ci
+          for i in $(seq 1 20); do curl -fsS http://localhost:8080/healthz && break; sleep 1; done
+          curl -fsS http://localhost:8080/services | grep -q '<div id="root">'
+          docker exec web nginx -t

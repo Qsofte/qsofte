@@ -1,0 +1,20 @@
+name: Certificate Monitor
+
+# Fails (and emails repo watchers) if the live certificate is expiring within 21 days.
+# Renewal itself runs in the certbot container on the server every 12h.
+on:
+  schedule:
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DOMAIN: ${{ vars.PROD_DOMAIN || 'qsofte.com' }}
+    steps:
+      - name: Check certificate expiry
+        run: |
+          echo | openssl s_client -connect "$DOMAIN:443" -servername "$DOMAIN" 2>/dev/null \
+            | openssl x509 -noout -subject -enddate -checkend 1814400 \
+            || { echo "::error::Certificate for $DOMAIN expires within 21 days"; exit 1; }

@@ -1,0 +1,27 @@
+# Production stack: one nginx container (static site + TLS) and a certbot
+# container that renews certificates every 12h. State lives in SHARED_DIR.
+name: qsofte
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: qsofte-web:latest
+    restart: always
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${SHARED_DIR:-/opt/qsofte/shared}/letsencrypt:/etc/letsencrypt:ro
+      - ${SHARED_DIR:-/opt/qsofte/shared}/certbot-www:/var/www/certbot:ro
+
+  certbot:
+    image: certbot/certbot:v3.0.1
+    restart: always
+    volumes:
+      - ${SHARED_DIR:-/opt/qsofte/shared}/letsencrypt:/etc/letsencrypt
+      - ${SHARED_DIR:-/opt/qsofte/shared}/certbot-www:/var/www/certbot
+    entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done"]
