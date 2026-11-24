@@ -15,6 +15,15 @@ jobs:
     steps:
       - name: Check certificate expiry
         run: |
-          echo | openssl s_client -connect "$DOMAIN:443" -servername "$DOMAIN" 2>/dev/null \
-            | openssl x509 -noout -subject -enddate -checkend 1814400 \
-            || { echo "::error::Certificate for $DOMAIN expires within 21 days"; exit 1; }
+          CERT=$(echo | openssl s_client -connect "$DOMAIN:443" -servername "$DOMAIN" 2>/dev/null | openssl x509) \
+            || { echo "::error::Could not read a certificate from $DOMAIN:443"; exit 1; }
+          echo "$CERT" | openssl x509 -noout -subject -issuer -enddate
+          if ! echo "$CERT" | openssl x509 -noout -checkend 0 >/dev/null; then
+            echo "::error::Certificate for $DOMAIN has EXPIRED ($(echo "$CERT" | openssl x509 -noout -enddate))"
+            exit 1
+          fi
+          if ! echo "$CERT" | openssl x509 -noout -checkend 1814400 >/dev/null; then
+            echo "::error::Certificate for $DOMAIN expires within 21 days"
+            exit 1
+          fi
+          echo "Certificate OK"
