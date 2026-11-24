@@ -3,6 +3,7 @@ dist
 .git
 .github
 deploy
+!deploy/nginx
 e2e
 test-results
 playwright-report
