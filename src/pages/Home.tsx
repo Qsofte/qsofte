@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import Clients from '../components/Clients';
 import Icon from '../components/Icon';
-import { arms, domains, hero, home, values, work } from '../content';
+import { aiPrinciples, arms, domains, hero, home, values, work } from '../content';
 import { usePageTitle } from '../usePageTitle';
 import './Home.css';
 
@@ -20,9 +20,9 @@ export default function Home() {
             <Link to="/contact" className="btn btn--secondary">
               {hero.primary}
             </Link>
-            <Link to="/services" className="link-more">
+            <a href="#how-we-build" className="link-more">
               {hero.secondary}
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -47,6 +47,35 @@ export default function Home() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="how-we-build" className="section home__ai" aria-labelledby="ai-heading">
+        <div className="container">
+          <header className="home__head">
+            <span className="eyebrow">{home.aiEyebrow}</span>
+            <h2 id="ai-heading" className="headline">
+              {home.aiTitle}
+            </h2>
+            <p className="lead">{home.aiLead}</p>
+          </header>
+          <ol className="home__principles">
+            {aiPrinciples.map((p) => (
+              <li key={p.title}>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
+              </li>
+            ))}
+          </ol>
+          <Link to="/srovi" className="home__example">
+            <Icon name="spark" size={32} />
+            <div>
+              <span className="eyebrow">{home.aiExampleLabel}</span>
+              <h3>{home.aiExampleTitle}</h3>
+              <p>{home.aiExampleText}</p>
+              <span className="link-more">{home.aiExampleAction}</span>
+            </div>
+          </Link>
         </div>
       </section>
 

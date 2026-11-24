@@ -31,5 +31,5 @@ test('navigation reaches contact form', async ({ page, isMobile }) => {
 test('deep link to a route is served (SPA fallback)', async ({ page }) => {
   const res = await page.goto('/services');
   expect(res?.status()).toBe(200);
-  await expect(page.getByRole('heading', { name: 'OpenEMR Solutions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'OpenEMR for healthcare' })).toBeVisible();
 });

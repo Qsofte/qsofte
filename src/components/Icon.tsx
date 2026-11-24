@@ -107,6 +107,13 @@ const paths: Record<IconName, JSX.Element> = {
       <path d="M2.5 13.5l3 3M21.5 13.5l-3 3M9 17.5l1.5 1.5M12 16.5l1.5 1.5" />
     </>
   ),
+  // AI-native: a spark
+  spark: (
+    <>
+      <path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" />
+      <path d="M18.5 15.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" />
+    </>
+  ),
   // Journey: on the shelf, one scan
   qr: (
     <>
