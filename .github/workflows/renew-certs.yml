@@ -1,0 +1,33 @@
+name: Renew SSL Certificates
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Force renewal even if certs are not due"
+        type: boolean
+        default: false
+  schedule:
+    # Weekly safety net (Mon 03:17 UTC). certbot is a no-op unless a cert is due,
+    # and the job fails (alerting you) if any cert is within 14 days of expiry.
+    - cron: "17 3 * * 1"
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Renew certificates on server
+        env:
+          SSHPASS: ${{ secrets.SERVER_PASSWORD }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          FORCE: ${{ inputs.force && 'force' || '' }}
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=no "$SERVER_USER@$SERVER_IP" \
+            "bash -s -- $FORCE" < scripts/renew-certs.sh
