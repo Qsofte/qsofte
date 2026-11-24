@@ -1,0 +1,107 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: var(--border);
+}
+
+.site-header .site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+}
+
+.site-header .site-header__logo {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+.site-header .site-header__logo img {
+  height: 28px;
+  width: auto;
+}
+
+.site-header .site-header__nav {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.site-header .site-header__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color var(--duration) var(--ease);
+}
+
+.site-header .site-header__nav a:hover,
+.site-header .site-header__nav a.active {
+  color: var(--ink);
+}
+
+.site-header .site-header__toggle {
+  display: none;
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.site-header .site-header__toggle span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  margin: var(--space-1) auto;
+  background: var(--ink);
+  transition: transform var(--duration) var(--ease);
+}
+
+.site-header .site-header__toggle[aria-expanded='true'] span:first-child {
+  transform: translateY(2.75px) rotate(45deg);
+}
+
+.site-header .site-header__toggle[aria-expanded='true'] span:last-child {
+  transform: translateY(-2.75px) rotate(-45deg);
+}
+
+@media (max-width: 640px) {
+  .site-header .site-header__toggle {
+    display: block;
+  }
+
+  .site-header .site-header__nav {
+    display: none;
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: var(--space-2) var(--gutter) var(--space-5);
+    background: var(--surface);
+    border-bottom: var(--border);
+  }
+
+  .site-header .site-header__nav--open {
+    display: flex;
+  }
+
+  .site-header .site-header__nav a {
+    padding: 0;
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    color: var(--ink);
+    border-bottom: var(--border);
+    min-height: 56px;
+  }
+}

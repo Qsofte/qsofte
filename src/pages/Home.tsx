@@ -1,24 +1,26 @@
 import { Link } from 'react-router-dom';
-import Clients from '../components/Clients';
 import CallToAction from '../components/CallToAction';
-import { hero, process, services, values } from '../content';
+import Clients from '../components/Clients';
+import Icon from '../components/Icon';
+import { hero, home, process, services, values } from '../content';
 import { usePageTitle } from '../usePageTitle';
+import './Home.css';
 
 export default function Home() {
   usePageTitle();
   return (
-    <>
-      <section className="hero">
+    <div className="home">
+      <section className="home__hero">
         <div className="container">
           <span className="eyebrow">{hero.eyebrow}</span>
-          <h1>{hero.title}</h1>
-          <p className="hero__lead">{hero.lead}</p>
-          <div className="hero__actions">
-            <Link to="/contact" className="btn btn--primary">
-              Start a conversation
+          <h1 className="display">{hero.title}</h1>
+          <p className="lead">{hero.lead}</p>
+          <div className="home__actions">
+            <Link to="/contact" className="btn btn--secondary">
+              {hero.primary}
             </Link>
-            <Link to="/services" className="btn btn--ghost">
-              Explore services
+            <Link to="/services" className="link-more">
+              {hero.secondary}
             </Link>
           </div>
         </div>
@@ -28,41 +30,36 @@ export default function Home() {
 
       <section className="section" aria-labelledby="services-heading">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">What we do</span>
-            <h2 id="services-heading">End-to-end technology, under one roof</h2>
-            <p>
-              From advice to delivery to support, we cover the whole lifecycle so you have one
-              partner accountable for the result.
-            </p>
-          </div>
-          <div className="card-grid">
+          <header className="home__head">
+            <span className="eyebrow">{home.servicesEyebrow}</span>
+            <h2 id="services-heading" className="headline">
+              {home.servicesTitle}
+            </h2>
+          </header>
+          <div className="home__tiles">
             {services.map((s) => (
-              <Link key={s.slug} to={`/services#${s.slug}`} className="service-card">
-                <div className="service-card__media">
-                  <img src={s.image} alt="" loading="lazy" />
-                </div>
-                <div className="service-card__body">
-                  <h3>{s.title}</h3>
-                  <p>{s.summary}</p>
-                  <span className="service-card__more">Learn more &rarr;</span>
-                </div>
+              <Link key={s.slug} to={`/services#${s.slug}`} className="home__tile">
+                <Icon name={s.icon} />
+                <h3>{s.title}</h3>
+                <p>{s.summary}</p>
+                <span className="link-more">{home.more}</span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section section--alt" aria-labelledby="why-heading">
+      <section className="section home__values" aria-labelledby="values-heading">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">Why Qsofte</span>
-            <h2 id="why-heading">A partner, not just a supplier</h2>
-          </div>
-          <div className="values">
+          <header className="home__head">
+            <span className="eyebrow">{home.valuesEyebrow}</span>
+            <h2 id="values-heading" className="headline">
+              {home.valuesTitle}
+            </h2>
+          </header>
+          <div className="home__columns">
             {values.map((v) => (
-              <div key={v.title} className="value">
-                <div className="value__mark" />
+              <div key={v.title}>
                 <h3>{v.title}</h3>
                 <p>{v.text}</p>
               </div>
@@ -73,11 +70,13 @@ export default function Home() {
 
       <section className="section" aria-labelledby="process-heading">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">How we work</span>
-            <h2 id="process-heading">Simple, transparent delivery</h2>
-          </div>
-          <ol className="steps">
+          <header className="home__head">
+            <span className="eyebrow">{home.processEyebrow}</span>
+            <h2 id="process-heading" className="headline">
+              {home.processTitle}
+            </h2>
+          </header>
+          <ol className="home__steps">
             {process.map((p) => (
               <li key={p.title}>
                 <h3>{p.title}</h3>
@@ -89,6 +88,6 @@ export default function Home() {
       </section>
 
       <CallToAction />
-    </>
+    </div>
   );
 }

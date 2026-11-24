@@ -1,0 +1,16 @@
+.cta {
+  padding: var(--section) 0;
+  border-top: var(--border);
+  text-align: center;
+}
+
+.cta .cta__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.cta .lead {
+  margin-bottom: var(--space-2);
+}

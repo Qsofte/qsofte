@@ -13,7 +13,8 @@ npm run test:e2e     # Playwright, desktop + mobile, against the production buil
 ```
 
 All copy (services, clients, contact details) lives in [`src/content.ts`](src/content.ts).
-Design tokens (colours, spacing, radii) are CSS variables at the top of [`src/styles.css`](src/styles.css).
+Design principles and guardrails: [`docs/design.md`](docs/design.md). Every value comes from
+[`src/styles/tokens.css`](src/styles/tokens.css); run `.claude/scripts/ui-check.sh` before pushing UI changes.
 
 ## Release pipeline
 

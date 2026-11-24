@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
+import { notFound } from '../content';
 import { usePageTitle } from '../usePageTitle';
+import './NotFound.css';
 
 export default function NotFound() {
   usePageTitle('Page not found');
   return (
-    <section className="container not-found">
-      <span className="eyebrow">404</span>
-      <h1>We couldn&rsquo;t find that page</h1>
-      <p>It may have moved. Try the home page instead.</p>
-      <Link to="/" className="btn btn--dark">
-        Back to home
-      </Link>
+    <section className="not-found">
+      <div className="container">
+        <h1 className="headline">{notFound.title}</h1>
+        <p className="lead">{notFound.text}</p>
+        <Link to="/" className="btn btn--primary">
+          {notFound.action}
+        </Link>
+      </div>
     </section>
   );
 }

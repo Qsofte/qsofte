@@ -1,0 +1,153 @@
+.home .home__hero {
+  padding: var(--space-10) 0 var(--space-9);
+  text-align: center;
+}
+
+.home .home__hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.home .home__hero .display {
+  max-width: 14ch;
+}
+
+.home .home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-5);
+  margin-top: var(--space-3);
+}
+
+.home .home__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.home .home__head .headline {
+  max-width: 20ch;
+}
+
+.home .home__tiles {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-4);
+}
+
+/* Two wide tiles, then three: a calm rhythm for five services. */
+.home .home__tile {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background var(--duration) var(--ease);
+}
+
+.home .home__tile:nth-child(-n + 2) {
+  grid-column: span 3;
+}
+
+.home .home__tile:hover {
+  background: var(--surface-3);
+}
+
+.home .home__tile svg {
+  margin-bottom: var(--space-5);
+}
+
+.home .home__tile h3 {
+  font-size: var(--text-lg);
+}
+
+.home .home__tile p {
+  color: var(--ink-2);
+  flex: 1;
+}
+
+.home .home__values {
+  background: var(--surface-2);
+}
+
+.home .home__columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-7);
+}
+
+.home .home__columns h3,
+.home .home__steps h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+
+.home .home__columns p,
+.home .home__steps p {
+  color: var(--ink-2);
+}
+
+.home .home__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-6);
+  counter-reset: step;
+}
+
+.home .home__steps li {
+  counter-increment: step;
+  padding-top: var(--space-5);
+  border-top: var(--border);
+}
+
+.home .home__steps li::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .home .home__tile,
+  .home .home__tile:nth-child(-n + 2) {
+    grid-column: span 3;
+  }
+
+  .home .home__tile:last-child {
+    grid-column: span 6;
+  }
+
+  .home .home__steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .home .home__hero {
+    padding: var(--space-9) 0 var(--space-8);
+  }
+
+  .home .home__tile,
+  .home .home__tile:nth-child(-n + 2),
+  .home .home__tile:last-child {
+    grid-column: span 6;
+  }
+
+  .home .home__columns,
+  .home .home__steps {
+    grid-template-columns: 1fr;
+  }
+}

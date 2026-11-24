@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { company, services } from '../content';
+import { company, footer, nav, services } from '../content';
+import './Footer.css';
 
 export default function Footer() {
   return (
@@ -7,8 +8,8 @@ export default function Footer() {
       <div className="container">
         <div className="site-footer__grid">
           <div>
-            <div className="site-footer__brand">{company.name}</div>
-            <p>{company.tagline}, based in Porirua, New Zealand.</p>
+            <p className="site-footer__brand">{company.name}</p>
+            <p>{footer.blurb}</p>
             <p>
               <a href={`mailto:${company.email}`}>{company.email}</a>
               <br />
@@ -16,7 +17,7 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h3>Services</h3>
+            <h2>{footer.servicesHeading}</h2>
             <ul>
               {services.map((s) => (
                 <li key={s.slug}>
@@ -26,23 +27,19 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3>Company</h3>
+            <h2>{footer.companyHeading}</h2>
             <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/services">Services</Link>
-              </li>
-              <li>
-                <Link to="/contact">Contact</Link>
-              </li>
+              {nav.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to}>{item.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="site-footer__bottom">
-          &copy; {new Date().getFullYear()} {company.name}. All rights reserved.
-        </div>
+        <p className="site-footer__legal">
+          &copy; {new Date().getFullYear()} {company.name}. {footer.rights}
+        </p>
       </div>
     </footer>
   );
