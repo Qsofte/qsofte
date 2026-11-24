@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 # Deploys one release of the site on the prod server. Idempotent: safe to re-run.
 #
-# Run from an extracted release (the pipeline does this):
-#   DOMAIN=qsofte.com SSL_EMAIL=admin@qsofte.com bash deploy/deploy.sh
+# Run from an extracted release, after the image has been loaded (the pipeline does both):
+#   IMAGE_TAG=<sha> DOMAIN=qsofte.com SSL_EMAIL=admin@qsofte.com bash deploy/deploy.sh
 #
 # Layout on the server:
-#   /opt/qsofte/releases/<sha>/   one directory per deployed commit
+#   /opt/qsofte/releases/<sha>/   one directory per deployed commit (last 3 kept)
 #   /opt/qsofte/current           symlink to the live release
 #   /opt/qsofte/shared/           certificates + ACME webroot (survive deploys)
 set -euo pipefail
 
 : "${DOMAIN:?DOMAIN must be set}"
 : "${SSL_EMAIL:?SSL_EMAIL must be set}"
+: "${IMAGE_TAG:?IMAGE_TAG must be set}"
 
 BASE=/opt/qsofte
 SHARED_DIR=$BASE/shared
 RELEASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export DOMAIN SHARED_DIR
+export DOMAIN SHARED_DIR IMAGE_TAG
 
 SUDO=""
 [ "$(id -u)" -ne 0 ] && SUDO="sudo -n"
@@ -54,10 +55,11 @@ $SUDO rm -f /etc/letsencrypt/renewal-hooks/pre/haproxy-stop.sh \
   /etc/letsencrypt/renewal-hooks/deploy/haproxy-pem.sh
 
 # --- Build and start ----------------------------------------------------------
-log "Building release $(basename "$RELEASE_DIR")"
-compose build --pull web
-log "Starting stack"
-compose up -d --remove-orphans
+# The image is built in CI and loaded by the pipeline; nothing is built here.
+docker image inspect "qsofte-web:$IMAGE_TAG" >/dev/null \
+  || { echo "Image qsofte-web:$IMAGE_TAG not found; the pipeline loads it before running this"; exit 1; }
+log "Starting stack with qsofte-web:$IMAGE_TAG"
+compose up -d --no-build --remove-orphans
 
 wait_healthy() {
   for _ in $(seq 1 30); do
@@ -83,7 +85,7 @@ fi
 
 # --- Mark release live and tidy up --------------------------------------------
 $SUDO ln -sfn "$RELEASE_DIR" "$BASE/current"
-ls -1dt "$BASE"/releases/*/ 2>/dev/null | tail -n +6 | xargs -r $SUDO rm -rf
+ls -1dt "$BASE"/releases/*/ 2>/dev/null | tail -n +4 | xargs -r $SUDO rm -rf
 docker image prune -f >/dev/null
 
 log "Deployed $(basename "$RELEASE_DIR") to https://$DOMAIN"

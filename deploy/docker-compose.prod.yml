@@ -1,14 +1,22 @@
 # Production stack: one nginx container (static site + TLS) and a certbot
 # container that renews certificates every 12h. State lives in SHARED_DIR.
+# The web image is built in CI and loaded onto the server (IMAGE_TAG).
 name: qsofte
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
 
 services:
   web:
     build:
       context: ..
       dockerfile: Dockerfile
-    image: qsofte-web:latest
+    image: qsofte-web:${IMAGE_TAG:-latest}
     restart: always
+    logging: *logging
     environment:
       DOMAIN: ${DOMAIN:?set DOMAIN}
     ports:
@@ -21,6 +29,7 @@ services:
   certbot:
     image: certbot/certbot:v3.0.1
     restart: always
+    logging: *logging
     volumes:
       - ${SHARED_DIR:-/opt/qsofte/shared}/letsencrypt:/etc/letsencrypt
       - ${SHARED_DIR:-/opt/qsofte/shared}/certbot-www:/var/www/certbot
