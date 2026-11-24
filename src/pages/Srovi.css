@@ -1,0 +1,282 @@
+.srovi .srovi__hero {
+  padding: var(--space-10) 0 var(--space-9);
+}
+
+.srovi .srovi__hero .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.srovi .srovi__hero .display {
+  max-width: 12ch;
+}
+
+.srovi .srovi__tagline {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+}
+
+.srovi .srovi__clients {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  font-weight: var(--weight-medium);
+}
+
+.srovi .headline {
+  max-width: 22ch;
+}
+
+/* The problem */
+.srovi .srovi__problem {
+  background: var(--surface-2);
+}
+
+.srovi .srovi__problems {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}
+
+.srovi .srovi__problems h3,
+.srovi .srovi__journey h3,
+.srovi .srovi__pool h3 {
+  font-size: var(--text-base);
+  margin-bottom: var(--space-1);
+}
+
+.srovi .srovi__problems p,
+.srovi .srovi__journey p {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+/* The journey and the passport */
+.srovi .srovi__split {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: var(--space-9);
+  align-items: center;
+}
+
+.srovi .srovi__journey {
+  list-style: none;
+  margin: var(--space-7) 0 var(--space-5);
+  padding: 0;
+}
+
+.srovi .srovi__journey li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-4) 0;
+  border-top: var(--border);
+}
+
+.srovi .srovi__principles {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.srovi .srovi__passport {
+  margin: 0;
+  padding: var(--space-6);
+  border: var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.srovi .srovi__passport-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.srovi .srovi__passport dl {
+  margin: 0;
+}
+
+.srovi .srovi__passport dl div {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: var(--border);
+  font-size: var(--text-sm);
+}
+
+.srovi .srovi__passport dt {
+  color: var(--ink-3);
+}
+
+.srovi .srovi__passport dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
+}
+
+.srovi .srovi__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: var(--ink);
+  color: var(--on-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.srovi .srovi__passport figcaption {
+  margin-top: var(--space-3);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+}
+
+/* Value */
+.srovi .srovi__value {
+  border-top: var(--border);
+}
+
+.srovi .srovi__pools {
+  margin-top: var(--space-7);
+}
+
+.srovi .srovi__pool {
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+  border-top: var(--border);
+  align-items: baseline;
+}
+
+.srovi .srovi__pool p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.srovi .srovi__pool span {
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+}
+
+.srovi .srovi__note {
+  margin-top: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--ink-3);
+}
+
+/* Built for the farm gate / proof / use cases */
+.srovi .srovi__lists {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-7);
+}
+
+.srovi .srovi__lists h2 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-4);
+}
+
+.srovi .srovi__lists ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.srovi .srovi__lists li {
+  padding: var(--space-3) 0;
+  border-top: var(--border);
+  font-size: var(--text-sm);
+}
+
+.srovi .srovi__lists .srovi__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.srovi .srovi__lists .srovi__chips li {
+  padding: var(--space-1) var(--space-3);
+  border: var(--border);
+  border-radius: var(--radius-full);
+}
+
+/* The ask */
+.srovi .srovi__ask {
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.srovi .srovi__ask .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.srovi .srovi__path {
+  list-style: none;
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  max-width: var(--measure);
+}
+
+.srovi .srovi__path li {
+  padding-top: var(--space-4);
+  border-top: var(--border);
+}
+
+.srovi .srovi__path h3 {
+  font-size: var(--text-base);
+}
+
+.srovi .srovi__path p {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+@media (max-width: 960px) {
+  .srovi .srovi__problems {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .srovi .srovi__split {
+    grid-template-columns: 1fr;
+    gap: var(--space-7);
+  }
+
+  .srovi .srovi__lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .srovi .srovi__hero {
+    padding: var(--space-9) 0 var(--space-8);
+  }
+
+  .srovi .srovi__problems {
+    grid-template-columns: 1fr;
+  }
+
+  .srovi .srovi__pool {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}

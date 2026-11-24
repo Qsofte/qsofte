@@ -5,6 +5,8 @@ import { a11y } from './content';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Services from './pages/Services';
+import Srovi from './pages/Srovi';
+import Industries from './pages/Industries';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 
@@ -31,7 +33,9 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/srovi" element={<Srovi />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/industries" element={<Industries />} />
           <Route path="/contact" element={<Contact />} />
           {/* Old URLs that may be bookmarked or linked */}
           <Route path="/Connect" element={<Navigate to="/contact" replace />} />

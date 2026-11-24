@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const pages = ['/', '/services', '/contact'];
+const pages = ['/', '/srovi', '/services', '/industries', '/contact'];
 
 for (const path of pages) {
   test(`${path} renders without horizontal scroll`, async ({ page }) => {

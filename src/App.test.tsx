@@ -37,6 +37,25 @@ describe('site', () => {
     }
   });
 
+  it('srovi page tells the first-mile story and asks for a diagnostic', () => {
+    renderAt('/srovi');
+    expect(screen.getByRole('heading', { level: 1, name: 'Trust at the first mile.' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Book a diagnostic' })).toBeTruthy();
+  });
+
+  it('industries page lists banking and every speciality', () => {
+    renderAt('/industries');
+    for (const title of ['Banking', 'Payments & Cards', 'Public Sector', 'AgriTech', 'Legal']) {
+      expect(screen.getByRole('heading', { level: 2, name: title })).toBeTruthy();
+    }
+  });
+
+  it('home shows both arms and the Chilli Masala POS work', () => {
+    renderAt('/');
+    expect(screen.getByRole('heading', { level: 3, name: 'Srovi' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3, name: 'Point of sale for a large restaurant chain' })).toBeTruthy();
+  });
+
   it('old /Connect link lands on the contact form', () => {
     renderAt('/Connect');
     expect(screen.getByRole('form', { name: 'Contact form' })).toBeTruthy();
