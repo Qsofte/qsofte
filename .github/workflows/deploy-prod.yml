@@ -40,10 +40,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Build production image
+        run: docker build -t "qsofte-web:${GITHUB_SHA}" .
+
       - name: Install sshpass
         run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
 
-      - name: Ship release and deploy
+      - name: Free disk space on server
+        env:
+          SSHPASS: ${{ secrets.SERVER_PASSWORD }}
+          TARGET: ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+        run: |
+          # Streamed over stdin: works even when the disk is too full to write a file.
+          sshpass -e ssh -o StrictHostKeyChecking=accept-new "$TARGET" 'bash -s' < deploy/free-space.sh
+
+      - name: Ship image and release, then deploy
         env:
           SSHPASS: ${{ secrets.SERVER_PASSWORD }}
           TARGET: ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
@@ -52,9 +63,10 @@ jobs:
           ssh_() { sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 "$TARGET" "$@"; }
           # Prefix for privileged commands when the deploy user is not root
           PRIV='S=""; [ "$(id -u)" -ne 0 ] && S="sudo -n";'
+          docker save "qsofte-web:${GITHUB_SHA}" | gzip | ssh_ "gunzip | docker load"
           ssh_ "$PRIV \$S mkdir -p $REL && \$S chown \"\$(id -un)\" $REL"
           git archive --format=tar HEAD | ssh_ "tar -x -C $REL"
-          ssh_ "cd $REL && DOMAIN='$DOMAIN' SSL_EMAIL='$SSL_EMAIL' bash deploy/deploy.sh"
+          ssh_ "cd $REL && IMAGE_TAG='${GITHUB_SHA}' DOMAIN='$DOMAIN' SSL_EMAIL='$SSL_EMAIL' bash deploy/deploy.sh"
 
       - name: Verify HTTPS and certificate
         run: |
