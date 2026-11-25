@@ -60,11 +60,11 @@ describe('site', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'Srovi is built this way.' })).toBeTruthy();
   });
 
-  it('home leads with the headline, both lines of business and no paragraph', () => {
+  it('home leads with both lines of business side by side, and no paragraph', () => {
     renderAt('/');
     expect(screen.getByRole('heading', { level: 1, name: 'Products that solve. Expertise that delivers.' })).toBeTruthy();
-    expect(screen.getByText('Srovi and RAM')).toBeTruthy();
-    expect(screen.getByText('Deep expertise in payments and agentic contact centres')).toBeTruthy();
+    expect(screen.getByText('Srovi for food supply chains. RAM for residents’ associations.')).toBeTruthy();
+    expect(screen.getByText('Deep expertise in payments and agentic contact centres.')).toBeTruthy();
     expect(document.querySelector('.home__hero .lead')).toBeNull();
   });
 
@@ -78,7 +78,7 @@ describe('site', () => {
   it('home presents the two lines of business, without the Srovi logo', () => {
     renderAt('/');
     expect(screen.getByText('Product development')).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 3, name: 'Expertise, delivered.' })).toBeTruthy();
+    expect(screen.getByText('Expertise that delivers.')).toBeTruthy();
     expect(screen.queryByAltText('Srovi')).toBeNull();
   });
 
@@ -89,7 +89,7 @@ describe('site', () => {
 
   it('home shows both arms and the Chilli Masala POS work', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { level: 3, name: 'Problems, solved.' })).toBeTruthy();
+    expect(screen.getByText('Products that solve.')).toBeTruthy();
     expect(screen.getByRole('heading', { level: 3, name: 'Point of sale for a large restaurant chain' })).toBeTruthy();
   });
 

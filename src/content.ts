@@ -16,16 +16,11 @@ export const company = {
 };
 
 export const hero = {
-  title: ['Products that solve.', 'Expertise that delivers.'],
-  lines: ['Srovi and RAM', 'Deep expertise in payments and agentic contact centres'],
-  primary: 'Explore our products',
-  secondary: 'Our services',
+  title: 'Products that solve. Expertise that delivers.',
 };
 
 export const home = {
   clientsLabel: 'Trusted by',
-  armsEyebrow: 'What we do',
-  armsTitle: 'Two lines of business. One standard of care.',
   aiEyebrow: 'How we build',
   aiTitle: 'AI-native, from the first line.',
   aiLead:
@@ -144,24 +139,22 @@ export const aiPrinciples = [
   },
 ];
 
-export type Arm = { eyebrow: string; title: string; tagline: string; text: string; to: string; action: string };
+export type Arm = { eyebrow: string; title: string; tagline: string; to: string; action: string };
 
 export const arms: Arm[] = [
   {
     eyebrow: 'Product development',
-    title: 'Problems, solved.',
+    title: 'Products that solve.',
     tagline: 'Srovi for food supply chains. RAM for residents’ associations.',
-    text: 'We find a problem people live with every day, then build the product that fixes it. Each one AI-native, each one focused on doing one job well.',
     to: '/products',
     action: 'Explore our products',
   },
   {
     eyebrow: 'Services & consulting',
-    title: 'Expertise, delivered.',
-    tagline: 'Deep in payments. Pioneering agentic contact centres.',
-    text: 'Senior teams working alongside yours, with payments and cards leading, agentic contact centres as a service, and specialist depth in banking, the public sector, AgriTech and legal.',
+    title: 'Expertise that delivers.',
+    tagline: 'Deep expertise in payments and agentic contact centres.',
     to: '/services',
-    action: 'Partner with us',
+    action: 'Our services',
   },
 ];
 
