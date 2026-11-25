@@ -161,6 +161,7 @@ export const arms: Arm[] = [
 export type Product = {
   slug: string;
   name: string;
+  logo?: string;
   fullName?: string;
   category: string;
   tagline: string;
@@ -179,6 +180,7 @@ export const products: Product[] = [
   {
     slug: 'srovi',
     name: 'Srovi',
+    logo: sroviLogo,
     category: 'AgriTech · Food supply chains',
     tagline: 'First-mile traceability for fresh food.',
     problem:

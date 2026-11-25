@@ -21,7 +21,13 @@ export default function Products() {
             <article key={p.slug} id={p.slug} className="products__item">
               <div className="products__name">
                 <span className="eyebrow">{p.category}</span>
-                <h2>{p.name}</h2>
+                <h2>
+                  {p.logo ? (
+                    <img src={p.logo} alt={p.name} className="products__logo" width={196} height={60} />
+                  ) : (
+                    p.name
+                  )}
+                </h2>
                 {p.fullName && <p className="products__full">{p.fullName}</p>}
               </div>
               <div className="products__body">
