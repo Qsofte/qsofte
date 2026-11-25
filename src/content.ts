@@ -7,7 +7,7 @@ import sroviLogo from './assets/srovi-logo.webp';
 
 export const company = {
   name: 'Qsofte',
-  tagline: 'Product development and services & consulting',
+  tagline: 'Products that solve. Expertise that delivers.',
   email: 'admin@qsofte.com',
   phone: '+64 22 414 2956',
   phoneHref: 'tel:+64224142956',
@@ -16,18 +16,11 @@ export const company = {
 };
 
 export const hero = {
-  eyebrow: 'Product development · Services & consulting',
-  title: 'Software, thoughtfully made.',
-  lead:
-    'We build our own products, starting with Srovi for agriculture, and we partner with teams in banking, payments, government and law to deliver theirs. AI-native from the first line, with senior engineers accountable at every step.',
-  primary: 'Start a conversation',
-  secondary: 'See how we build',
+  title: 'Products that solve. Expertise that delivers.',
 };
 
 export const home = {
   clientsLabel: 'Trusted by',
-  armsEyebrow: 'What we do',
-  armsTitle: 'Two lines of business. One standard of craft.',
   aiEyebrow: 'How we build',
   aiTitle: 'AI-native, from the first line.',
   aiLead:
@@ -53,7 +46,7 @@ export const home = {
 
 export const servicesPage = {
   title: 'Services & consulting',
-  lead: 'We partner with your team, for a single piece of work or the whole journey from strategy to launch. You work with senior people who own the outcome alongside you.',
+  lead: 'Payments is our deepest expertise, and agentic contact centres our newest. Around them, we partner with your team on a single piece of work or the whole journey, with senior people who own the outcome alongside you.',
 };
 
 export const contactPage = {
@@ -88,8 +81,8 @@ export const notFound = {
 };
 
 export const footer = {
-  blurb: 'We build products like Srovi, and partner with teams to deliver theirs.',
-  productHeading: 'Product',
+  blurb: 'Products that solve real problems, and deep expertise in payments and agentic contact centres.',
+  productHeading: 'Products',
   industriesHeading: 'Industries',
   servicesHeading: 'Services',
   companyHeading: 'Company',
@@ -101,7 +94,7 @@ export const a11y = {
 };
 
 export const nav = [
-  { to: '/srovi', label: 'Srovi' },
+  { to: '/products', label: 'Products' },
   { to: '/services', label: 'Services' },
   { to: '/industries', label: 'Industries' },
   { to: '/contact', label: 'Contact' },
@@ -123,7 +116,8 @@ export type IconName =
   | 'box'
   | 'handshake'
   | 'qr'
-  | 'spark';
+  | 'spark'
+  | 'headset';
 export type ServiceIcon = IconName;
 
 export const aiPrinciples = [
@@ -145,24 +139,63 @@ export const aiPrinciples = [
   },
 ];
 
-export type Arm = { eyebrow: string; title: string; tagline: string; text: string; to: string; action: string };
+export type Arm = { eyebrow: string; title: string; tagline: string; to: string; action: string };
 
 export const arms: Arm[] = [
   {
-    eyebrow: 'Product development · AgriTech',
-    title: 'Srovi',
+    eyebrow: 'Product development',
+    title: 'Products that solve.',
+    tagline: 'Srovi for food supply chains. RAM for residents’ associations.',
+    to: '/products',
+    action: 'Explore our products',
+  },
+  {
+    eyebrow: 'Services & consulting',
+    title: 'Expertise that delivers.',
+    tagline: 'Deep expertise in payments and agentic contact centres.',
+    to: '/services',
+    action: 'Our services',
+  },
+];
+
+export type Product = {
+  slug: string;
+  name: string;
+  fullName?: string;
+  category: string;
+  tagline: string;
+  problem: string;
+  to: string;
+  action: string;
+};
+
+export const productsPage = {
+  title: 'Products',
+  lead: 'We turn problems we understand deeply into products. Each one is built AI-native and does one job well.',
+  problemLabel: 'The problem it solves',
+};
+
+export const products: Product[] = [
+  {
+    slug: 'srovi',
+    name: 'Srovi',
+    category: 'AgriTech · Food supply chains',
     tagline: 'First-mile traceability for fresh food.',
-    text: 'Buyers must prove where their food came from, but the record breaks at the farm gate. Srovi captures it there, on the producer’s phone, and gives every lot a passport buyers can check.',
+    problem:
+      'Buyers must prove where their food came from, but the record breaks at the farm gate. Srovi captures it there, on the producer’s phone, and gives every lot a passport buyers can check.',
     to: '/srovi',
     action: 'Discover Srovi',
   },
   {
-    eyebrow: 'Services & consulting',
-    title: 'Partnering with you',
-    tagline: 'Senior teams, working alongside yours.',
-    text: 'From strategy to launch and beyond: technology consulting, AI-native product engineering, point of sale, OpenEMR and quality engineering.',
-    to: '/services',
-    action: 'Partner with us',
+    slug: 'ram',
+    name: 'RAM',
+    fullName: 'Resident Associations Manager',
+    category: 'Communities · Residents’ associations',
+    tagline: 'Running a residents’ association, made simple.',
+    problem:
+      'Residents’ associations are run by volunteers with little time and scattered tools. RAM brings the work of running one together in a single place.',
+    to: '/contact',
+    action: 'Ask about RAM',
   },
 ];
 
@@ -350,6 +383,32 @@ export type Service = {
 };
 
 export const services: Service[] = [
+  {
+    slug: 'payments',
+    title: 'Payments consulting',
+    summary:
+      'Payment and card programmes that must work every time, at the counter and online. We help you design, deliver and assure them, alongside your team.',
+    points: [
+      'Payment and card journey design',
+      'Gateway, terminal and point-of-sale integration',
+      'Testing and assurance for payment flows',
+      'Reconciliation and settlement reporting',
+    ],
+    icon: 'card',
+  },
+  {
+    slug: 'contact-centre',
+    title: 'Agentic contact centre as a service',
+    summary:
+      'AI agents that answer your customers’ calls and messages, resolve routine requests and hand over to your people when it matters. Delivered and run as a service.',
+    points: [
+      'AI agents for voice and messaging',
+      'Seamless handover to human agents',
+      'Integration with your systems and knowledge',
+      'Run, monitored and improved as a service',
+    ],
+    icon: 'headset',
+  },
   {
     slug: 'ai-native',
     title: 'AI-native product engineering',

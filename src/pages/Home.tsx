@@ -13,43 +13,25 @@ export default function Home() {
     <div className="home">
       <section className="home__hero">
         <div className="container">
-          <span className="eyebrow">{hero.eyebrow}</span>
-          <h1 className="display">{hero.title}</h1>
-          <p className="lead">{hero.lead}</p>
-          <div className="home__actions">
-            <Link to="/contact" className="btn btn--secondary">
-              {hero.primary}
-            </Link>
-            <a href="#how-we-build" className="link-more">
-              {hero.secondary}
-            </a>
+          <h1 className="visually-hidden">{hero.title}</h1>
+          <div className="home__split">
+            {arms.map((a) => (
+              <div key={a.to} className="home__half">
+                <span className="eyebrow">{a.eyebrow}</span>
+                <p className="display" aria-hidden="true">
+                  {a.title}
+                </p>
+                <p className="home__tagline">{a.tagline}</p>
+                <Link to={a.to} className="link-more">
+                  {a.action}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <Clients />
-
-      <section className="section" aria-labelledby="arms-heading">
-        <div className="container">
-          <header className="home__head">
-            <span className="eyebrow">{home.armsEyebrow}</span>
-            <h2 id="arms-heading" className="headline">
-              {home.armsTitle}
-            </h2>
-          </header>
-          <div className="home__arms">
-            {arms.map((a) => (
-              <Link key={a.to} to={a.to} className="home__arm">
-                <span className="eyebrow">{a.eyebrow}</span>
-                <h3>{a.title}</h3>
-                <p className="home__arm-tagline">{a.tagline}</p>
-                <p>{a.text}</p>
-                <span className="link-more">{a.action}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section id="how-we-build" className="section home__ai" aria-labelledby="ai-heading">
         <div className="container">

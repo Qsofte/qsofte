@@ -11,7 +11,7 @@
  */
 import { expect, test } from '@playwright/test';
 
-const routes = ['/', '/srovi', '/services', '/industries', '/contact', '/not-a-page'];
+const routes = ['/', '/products', '/srovi', '/services', '/industries', '/contact', '/not-a-page'];
 
 for (const route of routes) {
   test(`guardrails hold on ${route}`, async ({ page }) => {
