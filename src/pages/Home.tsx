@@ -23,7 +23,7 @@ export default function Home() {
             <Link to="/products" className="btn btn--secondary">
               {hero.primary}
             </Link>
-            <Link to="/services#payments" className="link-more">
+            <Link to="/services" className="link-more">
               {hero.secondary}
             </Link>
           </div>

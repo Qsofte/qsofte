@@ -7,7 +7,7 @@ import sroviLogo from './assets/srovi-logo.webp';
 
 export const company = {
   name: 'Qsofte',
-  tagline: 'Products that solve real problems. Payments consulting that delivers.',
+  tagline: 'Products that solve real problems. Expertise, delivered.',
   email: 'admin@qsofte.com',
   phone: '+64 22 414 2956',
   phoneHref: 'tel:+64224142956',
@@ -16,10 +16,10 @@ export const company = {
 };
 
 export const hero = {
-  title: 'Thoughtfully solved. Thoughtfully delivered.',
-  lines: ['Products that solve real problems', 'Payments consulting that delivers'],
+  title: 'Problems solved. Expertise delivered.',
+  lines: ['Products that solve real problems', 'Deep expertise in payments and agentic contact centres'],
   primary: 'Explore our products',
-  secondary: 'Payments consulting',
+  secondary: 'Our services',
 };
 
 export const home = {
@@ -51,7 +51,7 @@ export const home = {
 
 export const servicesPage = {
   title: 'Services & consulting',
-  lead: 'Payments consulting leads what we do. Around it, we partner with your team on a single piece of work or the whole journey, with senior people who own the outcome alongside you.',
+  lead: 'Payments is our deepest expertise, and agentic contact centres our newest. Around them, we partner with your team on a single piece of work or the whole journey, with senior people who own the outcome alongside you.',
 };
 
 export const contactPage = {
@@ -86,7 +86,7 @@ export const notFound = {
 };
 
 export const footer = {
-  blurb: 'Products that solve real problems. Payments consulting that delivers.',
+  blurb: 'Products that solve real problems, and deep expertise in payments and agentic contact centres.',
   productHeading: 'Products',
   industriesHeading: 'Industries',
   servicesHeading: 'Services',
@@ -121,7 +121,8 @@ export type IconName =
   | 'box'
   | 'handshake'
   | 'qr'
-  | 'spark';
+  | 'spark'
+  | 'headset';
 export type ServiceIcon = IconName;
 
 export const aiPrinciples = [
@@ -156,9 +157,9 @@ export const arms: Arm[] = [
   },
   {
     eyebrow: 'Services & consulting',
-    title: 'Payments, delivered.',
-    tagline: 'Senior teams, working alongside yours.',
-    text: 'Payments and cards consulting leads what we do, backed by deep banking experience and specialist teams for the public sector, AgriTech and legal.',
+    title: 'Expertise, delivered.',
+    tagline: 'Deep in payments. Pioneering agentic contact centres.',
+    text: 'Senior teams working alongside yours, with payments and cards leading, agentic contact centres as a service, and specialist depth in banking, the public sector, AgriTech and legal.',
     to: '/services',
     action: 'Partner with us',
   },
@@ -401,6 +402,19 @@ export const services: Service[] = [
       'Reconciliation and settlement reporting',
     ],
     icon: 'card',
+  },
+  {
+    slug: 'contact-centre',
+    title: 'Agentic contact centre as a service',
+    summary:
+      'AI agents that answer your customers’ calls and messages, resolve routine requests and hand over to your people when it matters. Delivered and run as a service.',
+    points: [
+      'AI agents for voice and messaging',
+      'Seamless handover to human agents',
+      'Integration with your systems and knowledge',
+      'Run, monitored and improved as a service',
+    ],
+    icon: 'headset',
   },
   {
     slug: 'ai-native',

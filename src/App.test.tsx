@@ -28,6 +28,7 @@ describe('site', () => {
     renderAt('/services');
     for (const title of [
       'Payments consulting',
+      'Agentic contact centre as a service',
       'AI-native product engineering',
       'Technology consultancy',
       'Point of sale',
@@ -61,9 +62,9 @@ describe('site', () => {
 
   it('home leads with the headline, both lines of business and no paragraph', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { level: 1, name: 'Thoughtfully solved. Thoughtfully delivered.' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'Problems solved. Expertise delivered.' })).toBeTruthy();
     expect(screen.getByText('Products that solve real problems')).toBeTruthy();
-    expect(screen.getByText('Payments consulting that delivers')).toBeTruthy();
+    expect(screen.getByText('Deep expertise in payments and agentic contact centres')).toBeTruthy();
     expect(document.querySelector('.home__hero .lead')).toBeNull();
   });
 
@@ -77,7 +78,7 @@ describe('site', () => {
   it('home presents the two lines of business, without the Srovi logo', () => {
     renderAt('/');
     expect(screen.getByText('Product development')).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 3, name: 'Payments, delivered.' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3, name: 'Expertise, delivered.' })).toBeTruthy();
     expect(screen.queryByAltText('Srovi')).toBeNull();
   });
 
