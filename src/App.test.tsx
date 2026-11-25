@@ -62,8 +62,8 @@ describe('site', () => {
 
   it('home leads with the headline, both lines of business and no paragraph', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { level: 1, name: 'Problems solved. Expertise delivered.' })).toBeTruthy();
-    expect(screen.getByText('Products that solve real problems')).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: 'Products that solve. Expertise that delivers.' })).toBeTruthy();
+    expect(screen.getByText('Srovi and RAM')).toBeTruthy();
     expect(screen.getByText('Deep expertise in payments and agentic contact centres')).toBeTruthy();
     expect(document.querySelector('.home__hero .lead')).toBeNull();
   });

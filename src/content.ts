@@ -7,7 +7,7 @@ import sroviLogo from './assets/srovi-logo.webp';
 
 export const company = {
   name: 'Qsofte',
-  tagline: 'Products that solve real problems. Expertise, delivered.',
+  tagline: 'Products that solve. Expertise that delivers.',
   email: 'admin@qsofte.com',
   phone: '+64 22 414 2956',
   phoneHref: 'tel:+64224142956',
@@ -16,8 +16,8 @@ export const company = {
 };
 
 export const hero = {
-  title: 'Problems solved. Expertise delivered.',
-  lines: ['Products that solve real problems', 'Deep expertise in payments and agentic contact centres'],
+  title: ['Products that solve.', 'Expertise that delivers.'],
+  lines: ['Srovi and RAM', 'Deep expertise in payments and agentic contact centres'],
   primary: 'Explore our products',
   secondary: 'Our services',
 };

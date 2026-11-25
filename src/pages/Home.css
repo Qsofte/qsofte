@@ -14,6 +14,10 @@
   max-width: 16ch;
 }
 
+.home .home__title-line {
+  display: block;
+}
+
 .home .home__lines {
   list-style: none;
   margin: 0;
@@ -33,7 +37,11 @@
 }
 
 @media (max-width: 640px) {
-  .home .home__lines {
+  .home .home__title-line {
+  display: block;
+}
+
+.home .home__lines {
     flex-direction: column;
   }
 

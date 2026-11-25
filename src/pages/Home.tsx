@@ -13,7 +13,13 @@ export default function Home() {
     <div className="home">
       <section className="home__hero">
         <div className="container">
-          <h1 className="display">{hero.title}</h1>
+          <h1 className="display">
+            {hero.title.map((line) => (
+              <span key={line} className="home__title-line">
+                {line}{' '}
+              </span>
+            ))}
+          </h1>
           <ul className="home__lines">
             {hero.lines.map((line) => (
               <li key={line}>{line}</li>
