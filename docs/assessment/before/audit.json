@@ -1,0 +1,432 @@
+{
+  "/": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".home__half:nth-child(1) > .eyebrow"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H2H3H3H2H3H3H3H2H2H2H2H2",
+      "title": "Qsofte | Software & Technology Partner"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H2H3H3H2H3H3H3H2H2H2H2H2",
+      "title": "Qsofte | Software & Technology Partner"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 11,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".home__half:nth-child(1) > .eyebrow"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H2H3H3H2H3H3H3H2H2H2H2H2",
+      "title": "Qsofte | Software & Technology Partner"
+    }
+  },
+  "/products": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "#srovi > .products__name > .eyebrow"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 5,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "#srovi > .products__name > .eyebrow"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    }
+  },
+  "/srovi": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 21,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".srovi__brand > .eyebrow"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2H2H2",
+      "title": "Srovi | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2H2H2",
+      "title": "Srovi | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 21,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".srovi__brand > .eyebrow"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2H2H2",
+      "title": "Srovi | Qsofte"
+    }
+  },
+  "/services": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".eyebrow"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Services & consulting"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H3H3H3H3H2H2H2H2H2",
+      "title": "Services & consulting | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Services & consulting"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H3H3H3H3H2H2H2H2H2",
+      "title": "Services & consulting | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 2,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".eyebrow"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Services & consulting"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H3H3H3H3H2H2H2H2H2",
+      "title": "Services & consulting | Qsofte"
+    }
+  },
+  "/industries": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "#banking > .industries__title > .eyebrow"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Industries"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H2",
+      "title": "Industries | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Industries"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H2",
+      "title": "Industries | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 6,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "#banking > .industries__title > .eyebrow"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Industries"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2H2H2H2",
+      "title": "Industries | Qsofte"
+    }
+  },
+  "/contact": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 4,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "div:nth-child(1) > dt"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Contact | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Contact | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 4,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": "div:nth-child(1) > dt"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Contact | Qsofte"
+    }
+  },
+  "/nope": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": null,
+      "permissions-policy": null,
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Software &amp; Technology Partner",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and delivers consultancy and engineering for banking, payments and cards, the public sector, AgriTech and legal.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Software & Technology Partner",
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 107,
+    "axe_phone": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".site-footer__legal"
+      }
+    ],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Page not found | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Page not found | Qsofte"
+    },
+    "axe_desktop": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1,
+        "help": "Elements must meet minimum color contrast ratio thresholds",
+        "sample": ".site-footer__legal"
+      }
+    ],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2H2H2",
+      "title": "Page not found | Qsofte"
+    }
+  },
+  "consoleErrors_phone": [],
+  "consoleErrors_tablet": [],
+  "consoleErrors_desktop": []
+}
