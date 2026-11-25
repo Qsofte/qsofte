@@ -10,7 +10,11 @@ export default function Srovi() {
     <div className="srovi">
       <section className="srovi__hero">
         <div className="container">
-          <span className="eyebrow">{srovi.eyebrow}</span>
+          <div className="srovi__brand">
+            <img src={srovi.logo} alt={srovi.logoAlt} width={157} height={48} />
+            <span className="eyebrow">{srovi.byline}</span>
+          </div>
+          <p className="srovi__helper">{srovi.helper}</p>
           <h1 className="display">{srovi.title}</h1>
           <p className="srovi__tagline">{srovi.tagline}</p>
           <p className="lead">{srovi.lead}</p>

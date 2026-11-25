@@ -42,6 +42,7 @@ export default function Home() {
               <Link key={a.to} to={a.to} className="home__arm">
                 <span className="eyebrow">{a.eyebrow}</span>
                 <h3>{a.title}</h3>
+                <p className="home__arm-tagline">{a.tagline}</p>
                 <p>{a.text}</p>
                 <span className="link-more">{a.action}</span>
               </Link>
