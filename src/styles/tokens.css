@@ -9,7 +9,7 @@
   /* Colour */
   --ink: #1b2a51;          /* brand navy: text, primary action */
   --ink-2: #4a5574;        /* secondary text */
-  --ink-3: #7a8399;        /* tertiary text, captions */
+  --ink-3: #5e6780;        /* tertiary text, captions (≥ 4.5:1 on every surface) */
   --hairline: #e6e8ee;     /* borders, dividers */
   --surface: #ffffff;
   --surface-2: #f6f7f9;    /* quiet panels */
@@ -17,6 +17,10 @@
   --accent: #8fd7bd;       /* brand mint: focus ring and small marks only */
   --on-ink: #ffffff;       /* text on an ink surface */
   --danger: #b42318;
+
+  /* Product accents: each product keeps its own identity, used sparingly */
+  --srovi: #509c08;        /* from the Srovi logo; marks only, never body text */
+  --samewe: #1d4d2c;       /* Samewe forest green (from its app) */
   --glass: rgba(255, 255, 255, 0.82);
 
   /* Type */

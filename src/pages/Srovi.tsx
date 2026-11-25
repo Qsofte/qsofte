@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { srovi } from '../content';
-import { usePageTitle } from '../usePageTitle';
+import StatusTag from '../components/StatusTag';
+import { usePageMeta } from '../usePageMeta';
 import './Srovi.css';
 
 export default function Srovi() {
-  usePageTitle('Srovi');
+  usePageMeta('/srovi');
   return (
     <div className="srovi">
       <section className="srovi__hero">
@@ -13,6 +14,7 @@ export default function Srovi() {
           <div className="srovi__brand">
             <img src={srovi.logo} alt={srovi.logoAlt} width={157} height={48} />
             <span className="eyebrow">{srovi.byline}</span>
+            <StatusTag status={srovi.status} />
           </div>
           <p className="srovi__helper">{srovi.helper}</p>
           <h1 className="display">{srovi.title}</h1>

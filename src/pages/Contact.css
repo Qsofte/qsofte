@@ -61,6 +61,7 @@
 }
 
 .contact-page input,
+.contact-page select,
 .contact-page textarea {
   width: 100%;
   min-height: var(--tap);
@@ -75,6 +76,7 @@
 }
 
 .contact-page input:focus,
+.contact-page select:focus,
 .contact-page textarea:focus {
   outline: none;
   background: var(--surface);
@@ -87,6 +89,21 @@
 
 .contact-page .btn {
   justify-self: start;
+}
+
+.contact-page .contact-page__trap {
+  display: none;
+}
+
+.contact-page .contact-page__privacy {
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+}
+
+.contact-page .contact-page__privacy a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
 }
 
 .contact-page .contact-page__error {

@@ -33,6 +33,7 @@ server {
 
     root /usr/share/nginx/html;
     index index.html;
+    absolute_redirect off;
 
     gzip on;
     gzip_vary on;
@@ -41,6 +42,12 @@ server {
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()" always;
+    # Everything is served from this origin; the contact form posts to Formspree.
+    # JSON-LD blocks are data, not script, so script-src 'self' does not affect them.
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'" always;
+
+    error_page 404 /404.html;
 
     location = /healthz {
         access_log off;
@@ -48,16 +55,27 @@ server {
         return 200 "ok\n";
     }
 
+    # Retired URLs keep working for anyone who linked to them.
+    location = /services { return 301 /engineering; }
+    location = /industries { return 301 /engineering; }
+    location = /Connect { return 301 /contact; }
+    location = /connect { return 301 /contact; }
+
     location /assets/ {
         expires 1y;
         try_files $uri =404;
     }
 
-    location = /index.html {
+    location = /404.html {
+        internal;
         expires -1;
     }
 
+    # Every page is prerendered to <path>/index.html at build time (scripts/prerender.mjs),
+    # so anything else is a real 404. HTML is never cached.
     location / {
-        try_files $uri $uri/ /index.html;
+        rewrite ^(.+)/$ $1 permanent;
+        expires -1;
+        try_files $uri $uri/index.html =404;
     }
 }

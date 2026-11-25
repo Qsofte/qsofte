@@ -1,0 +1,32 @@
+.product-mark {
+  display: inline-block;
+}
+
+.product-mark.product-mark--logo.product-mark--md {
+  height: 48px;
+  width: auto;
+}
+
+.product-mark.product-mark--logo.product-mark--lg {
+  height: 56px;
+  width: auto;
+}
+
+.product-mark.product-mark--word {
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.product-mark.product-mark--word.product-mark--md {
+  font-size: var(--text-2xl);
+}
+
+.product-mark.product-mark--word.product-mark--lg {
+  font-size: var(--text-display);
+}
+
+/* Samewe has no logo yet; its wordmark carries the product accent. */
+.product-mark.product-mark--word.product-mark--samewe {
+  color: var(--samewe);
+}
