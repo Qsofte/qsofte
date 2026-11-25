@@ -33,6 +33,11 @@
   line-height: var(--leading-tight);
 }
 
+.products .products__logo {
+  height: 52px;
+  width: auto;
+}
+
 .products .products__full {
   color: var(--ink-2);
 }

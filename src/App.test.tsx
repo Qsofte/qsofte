@@ -72,6 +72,7 @@ describe('site', () => {
     renderAt('/products');
     expect(screen.getByRole('heading', { level: 2, name: 'Srovi' })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 2, name: 'RAM' })).toBeTruthy();
+    expect(screen.getByAltText('Srovi')).toBeTruthy();
     expect(screen.getByText('Resident Associations Manager')).toBeTruthy();
   });
 
