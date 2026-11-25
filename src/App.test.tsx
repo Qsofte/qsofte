@@ -27,6 +27,7 @@ describe('site', () => {
   it('services page lists all services', () => {
     renderAt('/services');
     for (const title of [
+      'Payments consulting',
       'AI-native product engineering',
       'Technology consultancy',
       'Point of sale',
@@ -58,10 +59,25 @@ describe('site', () => {
     expect(screen.getByRole('heading', { level: 3, name: 'Srovi is built this way.' })).toBeTruthy();
   });
 
+  it('home leads with the headline, both lines of business and no paragraph', () => {
+    renderAt('/');
+    expect(screen.getByRole('heading', { level: 1, name: 'Thoughtfully solved. Thoughtfully delivered.' })).toBeTruthy();
+    expect(screen.getByText('Products that solve real problems')).toBeTruthy();
+    expect(screen.getByText('Payments consulting that delivers')).toBeTruthy();
+    expect(document.querySelector('.home__hero .lead')).toBeNull();
+  });
+
+  it('products page lists Srovi and RAM', () => {
+    renderAt('/products');
+    expect(screen.getByRole('heading', { level: 2, name: 'Srovi' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 2, name: 'RAM' })).toBeTruthy();
+    expect(screen.getByText('Resident Associations Manager')).toBeTruthy();
+  });
+
   it('home presents the two lines of business, without the Srovi logo', () => {
     renderAt('/');
-    expect(screen.getByText('Product development · AgriTech')).toBeTruthy();
-    expect(screen.getByRole('heading', { level: 3, name: 'Partnering with you' })).toBeTruthy();
+    expect(screen.getByText('Product development')).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3, name: 'Payments, delivered.' })).toBeTruthy();
     expect(screen.queryByAltText('Srovi')).toBeNull();
   });
 
@@ -72,7 +88,7 @@ describe('site', () => {
 
   it('home shows both arms and the Chilli Masala POS work', () => {
     renderAt('/');
-    expect(screen.getByRole('heading', { level: 3, name: 'Srovi' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3, name: 'Problems, solved.' })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 3, name: 'Point of sale for a large restaurant chain' })).toBeTruthy();
   });
 

@@ -13,16 +13,19 @@ export default function Home() {
     <div className="home">
       <section className="home__hero">
         <div className="container">
-          <span className="eyebrow">{hero.eyebrow}</span>
           <h1 className="display">{hero.title}</h1>
-          <p className="lead">{hero.lead}</p>
+          <ul className="home__lines">
+            {hero.lines.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
           <div className="home__actions">
-            <Link to="/contact" className="btn btn--secondary">
+            <Link to="/products" className="btn btn--secondary">
               {hero.primary}
             </Link>
-            <a href="#how-we-build" className="link-more">
+            <Link to="/services#payments" className="link-more">
               {hero.secondary}
-            </a>
+            </Link>
           </div>
         </div>
       </section>

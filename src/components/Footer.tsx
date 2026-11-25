@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { company, domains, footer, nav, services } from '../content';
+import { company, domains, footer, nav, products, services } from '../content';
 import './Footer.css';
 
 export default function Footer() {
@@ -15,6 +15,16 @@ export default function Footer() {
               <br />
               <a href={company.phoneHref}>{company.phone}</a>
             </p>
+          </div>
+          <div>
+            <h2>{footer.productHeading}</h2>
+            <ul>
+              {products.map((p) => (
+                <li key={p.slug}>
+                  <Link to={`/products#${p.slug}`}>{p.name}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
             <h2>{footer.servicesHeading}</h2>

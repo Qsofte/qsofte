@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import Srovi from './pages/Srovi';
+import Products from './pages/Products';
 import Industries from './pages/Industries';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
@@ -33,6 +34,7 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
           <Route path="/srovi" element={<Srovi />} />
           <Route path="/services" element={<Services />} />
           <Route path="/industries" element={<Industries />} />
