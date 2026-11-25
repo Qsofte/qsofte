@@ -20,7 +20,7 @@ npx vitest run --reporter=dot || fail "unit tests"
 step "typecheck + build"
 npm run build --silent >/dev/null || fail "build"
 
-step "browser guardrails + e2e (desktop + phone)"
+step "browser guardrails + e2e (desktop, tablet, phone)"
 npx playwright test --trace off --reporter=line || fail "browser guardrails / e2e"
 
 printf '\nui-check passed.\n'

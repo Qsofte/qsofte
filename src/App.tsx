@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import { a11y } from './content';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Srovi from './pages/Srovi';
-import Products from './pages/Products';
-import Industries from './pages/Industries';
+import About from './pages/About';
 import Contact from './pages/Contact';
+import Engineering from './pages/Engineering';
+import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import Privacy from './pages/Privacy';
+import Products from './pages/Products';
+import Samewe from './pages/Samewe';
+import Srovi from './pages/Srovi';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -36,10 +38,14 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/srovi" element={<Srovi />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/industries" element={<Industries />} />
+          <Route path="/samewe" element={<Samewe />} />
+          <Route path="/engineering" element={<Engineering />} />
+          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          {/* Old URLs that may be bookmarked or linked */}
+          <Route path="/privacy" element={<Privacy />} />
+          {/* Retired URLs. nginx answers these with a 301; these cover client-side links. */}
+          <Route path="/services" element={<Navigate to="/engineering" replace />} />
+          <Route path="/industries" element={<Navigate to="/engineering" replace />} />
           <Route path="/Connect" element={<Navigate to="/contact" replace />} />
           <Route path="/connect" element={<Navigate to="/contact" replace />} />
           <Route path="*" element={<NotFound />} />

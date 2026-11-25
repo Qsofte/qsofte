@@ -1,0 +1,42 @@
+.privacy {
+  padding: var(--space-10) 0 var(--section);
+}
+
+.privacy .container {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+}
+
+.privacy .privacy__updated {
+  margin: var(--space-3) 0 var(--space-7);
+  font-size: var(--text-sm);
+  color: var(--ink-3);
+}
+
+.privacy section {
+  padding: var(--space-5) 0;
+  border-top: var(--border);
+}
+
+.privacy h2 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+.privacy section p {
+  color: var(--ink-2);
+}
+
+.privacy section p + p {
+  margin-top: var(--space-3);
+}
+
+.privacy .privacy__contact {
+  margin-top: var(--space-6);
+}
+
+.privacy .privacy__contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-weight: var(--weight-medium);
+}

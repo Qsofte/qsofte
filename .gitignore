@@ -12,3 +12,4 @@ deploy/certbot/conf/
 deploy/certbot/www/
 deploy/nginx/nginx.conf
 *.tsbuildinfo
+dist-ssr/

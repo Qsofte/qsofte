@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
+import ProductMark from '../components/ProductMark';
+import StatusTag from '../components/StatusTag';
 import { products, productsPage as copy } from '../content';
-import { usePageTitle } from '../usePageTitle';
+import { usePageMeta } from '../usePageMeta';
 import './Products.css';
 
 export default function Products() {
-  usePageTitle(copy.title);
+  usePageMeta('/products');
   return (
     <div className="products">
       <section className="products__hero">
@@ -20,20 +22,26 @@ export default function Products() {
           {products.map((p) => (
             <article key={p.slug} id={p.slug} className="products__item">
               <div className="products__name">
-                <span className="eyebrow">{p.category}</span>
                 <h2>
-                  {p.logo ? (
-                    <img src={p.logo} alt={p.name} className="products__logo" width={196} height={60} />
-                  ) : (
-                    p.name
-                  )}
+                  <ProductMark name={p.name} logo={p.logo} />
                 </h2>
-                {p.fullName && <p className="products__full">{p.fullName}</p>}
+                <p className="products__byline">
+                  {copy.byline} · {p.sector}
+                </p>
+                <StatusTag status={p.status} />
               </div>
               <div className="products__body">
                 <p className="products__tagline">{p.tagline}</p>
-                <span className="eyebrow">{copy.problemLabel}</span>
-                <p>{p.problem}</p>
+                <dl>
+                  <div>
+                    <dt>{copy.problemLabel}</dt>
+                    <dd>{p.problem}</dd>
+                  </div>
+                  <div>
+                    <dt>{copy.audienceLabel}</dt>
+                    <dd>{p.audience}</dd>
+                  </div>
+                </dl>
                 <Link to={p.to} className="link-more">
                   {p.action}
                 </Link>

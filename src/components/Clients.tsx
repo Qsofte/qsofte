@@ -11,7 +11,7 @@ export default function Clients() {
         <ul className="clients__list">
           {clients.map((c) => (
             <li key={c.name}>
-              <img src={c.logo} alt={c.name} loading="lazy" />
+              <img src={c.logo} alt={c.name} width={c.width} height={c.height} loading="lazy" />
             </li>
           ))}
         </ul>

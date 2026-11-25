@@ -1,13 +1,22 @@
-import { FormEvent, useState } from 'react';
-import { company, contactPage as copy } from '../content';
-import { usePageTitle } from '../usePageTitle';
+import { FormEvent, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { company, contactPage as copy, topics } from '../content';
+import { usePageMeta } from '../usePageMeta';
 import './Contact.css';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
 export default function Contact() {
-  usePageTitle('Contact');
+  usePageMeta('/contact');
   const [status, setStatus] = useState<Status>('idle');
+  const [params] = useSearchParams();
+  const [topic, setTopic] = useState(topics[0].value);
+
+  // The page is prerendered without a query string; apply ?topic= after hydration.
+  useEffect(() => {
+    const wanted = params.get('topic');
+    if (wanted && topics.some((t) => t.value === wanted)) setTopic(wanted);
+  }, [params]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -64,6 +73,16 @@ export default function Contact() {
             aria-label={copy.formLabel}
           >
             <div className="contact-page__field">
+              <label htmlFor="topic">{copy.fields.topic}</label>
+              <select id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)}>
+                {topics.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="contact-page__field">
               <label htmlFor="name">{copy.fields.name}</label>
               <input id="name" name="name" autoComplete="name" required />
             </div>
@@ -85,14 +104,22 @@ export default function Contact() {
               <label htmlFor="message">{copy.fields.message}</label>
               <textarea id="message" name="message" rows={5} required />
             </div>
+            {/* Spam trap: hidden from people and assistive technology; bots fill it in. */}
+            <div className="contact-page__trap" aria-hidden="true">
+              <label htmlFor="gotcha">{copy.honeypot}</label>
+              <input id="gotcha" name="_gotcha" tabIndex={-1} autoComplete="off" />
+            </div>
             {status === 'error' && (
               <p className="contact-page__error" role="alert">
-                {copy.error} {company.email}.
+                {copy.error} <a href={`mailto:${company.email}`}>{company.email}</a>.
               </p>
             )}
             <button className="btn btn--primary" type="submit" disabled={status === 'sending'}>
               {status === 'sending' ? copy.sending : copy.submit}
             </button>
+            <p className="contact-page__privacy">
+              {copy.privacyNote} <Link to="/privacy">{copy.privacyLink}</Link>
+            </p>
           </form>
         )}
       </section>

@@ -10,11 +10,16 @@
  *   - every image has loaded and has alt text
  */
 import { expect, test } from '@playwright/test';
+import { routes as pages } from './routes';
 
-const routes = ['/', '/products', '/srovi', '/services', '/industries', '/contact', '/not-a-page'];
+const routes = [...pages, '/not-a-page'];
 
 for (const route of routes) {
   test(`guardrails hold on ${route}`, async ({ page }) => {
+    // Console errors include Content-Security-Policy violations when served by nginx.
+    const consoleErrors: string[] = [];
+    page.on('console', (m) => m.type() === 'error' && consoleErrors.push(m.text()));
+    page.on('pageerror', (e) => consoleErrors.push(e.message));
     await page.goto(route, { waitUntil: 'networkidle' });
     await page.evaluate(async () => {
       // Load lazy images: scroll through the page, then back to the top.
@@ -87,5 +92,7 @@ for (const route of routes) {
     });
 
     expect(findings, 'See docs/design.md and .claude/skills/ui-change').toEqual([]);
+    // A missing page returns 404 from nginx, which the browser logs; that is expected.
+    expect(consoleErrors.filter((e) => !/status of 404/.test(e)), 'console errors').toEqual([]);
   });
 }

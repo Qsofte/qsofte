@@ -7,14 +7,31 @@ with automatic Let's Encrypt certificates.
 
 ```bash
 npm install
-npm run dev          # http://localhost:5173
-npm run check        # typecheck + unit tests + production build
-npm run test:e2e     # Playwright, desktop + mobile, against the production build
+npm run dev          # http://localhost:5173 (client-rendered, for editing)
+npm run check        # typecheck + unit tests + production build (with prerender)
+npm run test:e2e     # Playwright on desktop, tablet and phone, against the built site
+npm run serve        # serve dist/ exactly as production nginx does
 ```
 
-All copy (services, clients, contact details) lives in [`src/content.ts`](src/content.ts).
-Design principles and guardrails: [`docs/design.md`](docs/design.md). Every value comes from
-[`src/styles/tokens.css`](src/styles/tokens.css); run `.claude/scripts/ui-check.sh` before pushing UI changes.
+**Brand architecture.** Qsofte is the parent company. Srovi (AgriTech) and Samewe
+(CommunityTech) are its products, and Qsofte Engineering is its technology-services arm.
+Pages: `/`, `/products`, `/srovi`, `/samewe`, `/engineering`, `/about`, `/contact`, `/privacy`.
+
+**Content.** All copy, page titles and descriptions, and structured data live in
+[`src/content.ts`](src/content.ts). Every factual claim has a source in
+[`docs/assessment/`](docs/assessment/README.md); add one when you add a claim.
+
+**How pages are built.** `npm run build` builds the client, then renders every page in
+`pages` (content.ts) to static HTML with React's server renderer
+([`scripts/prerender.mjs`](scripts/prerender.mjs)). Each page gets its own HTML, title,
+description, canonical, Open Graph data and JSON-LD, plus a generated `sitemap.xml` and
+`404.html`. The browser then hydrates it into the React app. To add a page: add it to
+`pages` in `content.ts`, add a `<Route>` in `App.tsx`, and add it to `e2e/routes.ts`.
+
+**Design.** Principles, the design system and its guardrails are in
+[`docs/design.md`](docs/design.md). Every value comes from
+[`src/styles/tokens.css`](src/styles/tokens.css); run `.claude/scripts/ui-check.sh` before
+pushing UI changes.
 
 ## Release pipeline
 

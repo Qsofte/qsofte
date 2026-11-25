@@ -1,6 +1,11 @@
 # Qsofte website
 
-Marketing site for qsofte.com. Vite + React 18 + TypeScript, plain CSS, no UI framework.
+Website for qsofte.com. Vite + React 18 + TypeScript, plain CSS, no UI framework. Every
+page is prerendered to static HTML at build time (`scripts/prerender.mjs`) and hydrated.
+
+**Brand architecture (approved):** Qsofte is the parent company; **Srovi** (AgriTech) and
+**Samewe** (CommunityTech) are its products; **Qsofte Engineering** is its services arm.
+Samewe's code lives in the `ram` repository; "RAM" is never used on the site.
 
 **Design: Jony Ive inspired: simplicity, clarity, deference.** Read `docs/design.md`.
 **Any UI or copy change follows `.claude/skills/ui-change`** and passes `.claude/scripts/ui-check.sh`
@@ -9,12 +14,21 @@ before it is pushed. A hook runs the design guard after every edit under `src/`.
 ## Commands
 
 - `npm run check` (typecheck + vitest + build). Run before every push.
-- `npm run test:e2e` (Playwright desktop + mobile against `vite preview`, incl. browser guardrails).
+- `npm run test:e2e` (Playwright desktop, tablet and phone against `scripts/serve-dist.mjs`, which
+  serves `dist/` like production nginx: own HTML per page, real 404s, the same 301s).
+  `vite preview` is not used for tests: it serves the home page's HTML for every route.
 - `.claude/scripts/ui-check.sh` (all of the above, in order).
 
 ## Rules
 
-- **Copy lives in `src/content.ts`.** Pages render it; don't hardcode text in components.
+- **Copy lives in `src/content.ts`.** Pages render it; don't hardcode text in components. Page
+  titles, descriptions and JSON-LD live there too (`pages`, `structuredData`).
+- **Claims need evidence.** Never invent clients, metrics, capabilities or availability. Every
+  claim has a source in `docs/assessment/README.md` (product evidence) or `decisions.md`. Product
+  status (`In use`, `In development`, module `Built/In progress/Planned`) must match the product
+  repos (`om` for Srovi, `ram` for Samewe).
+- **A new page** is added in three places: `pages` in `content.ts`, a `<Route>` in `App.tsx`,
+  and `e2e/routes.ts`. The prerender fails the build if a page renders no `<h1>`.
 - **Clients are preserved.** Westpac, Chilli Masala, Adyopant Legal and Atmabodh must stay on the
   home page. `src/App.test.tsx` and `e2e/site.spec.ts` fail if a logo disappears.
 - **Every value is a token.** Colour, spacing, type, radii and motion live in `src/styles/tokens.css`.
@@ -25,7 +39,12 @@ before it is pushed. A hook runs the design guard after every edit under `src/`.
 - **Icons are drawn** in `components/Icon.tsx` (24px grid, 1.5 stroke, currentColor). No emoji, no clip art.
 - **Images** are WebP/SVG, ≤150 KB, used, with alt.
 - **Phone first.** No horizontal scroll at 390px, 44px tap targets, 16px inputs (`e2e/guardrails.spec.ts` measures them).
-- **Old URLs keep working.** `/Connect` redirects to `/contact`; add a redirect when you rename a route.
+- **Old URLs keep working.** `/services` and `/industries` → `/engineering`, `/Connect` → `/contact`:
+  301s in both nginx templates and in `scripts/serve-dist.mjs`, and a `<Navigate>` in `App.tsx`.
+  Add all of them when you rename a route.
+- **Security headers** (CSP, Permissions-Policy) live in `deploy/nginx/*.conf.template`. The CSP
+  allows nothing inline: no `style={...}`, no inline scripts. A new third party needs a CSP entry
+  and a line in the privacy notice.
 - **Infra is code.** Server changes go in `deploy/` and ship through `deploy-prod.yml`; never hand-edit the server.
   Certificates renew in the `certbot` container; nginx reloads every 6h to serve them.
 - Never commit secrets. Deploy credentials are GitHub secrets (`SERVER_*`).
