@@ -56,8 +56,8 @@ person outside the codebase.
 - **Acceptance:** linked from every page; no tracking claims that are false.
 
 ### P1-8 Patch react-router-dom (high-severity advisories) — Done
-- **Change:** 6.28 → latest 6.30.x (non-breaking).
-- **Acceptance:** `npm audit --omit=dev` reports 0 vulnerabilities.
+- **Change:** 6.28 → 6.30.6 (non-breaking).
+- **Acceptance:** no high-severity advisories in `npm audit --omit=dev` (2 moderate remain; P2-8).
 
 ## P2
 
@@ -80,6 +80,14 @@ person outside the codebase.
 
 ### P2-6 Dev-only advisories (esbuild via Vite 5, Vitest) — Open
 - **Change:** move to Vite 6 or 7 and Vitest 3 in a separate PR. A major-version bump; dev server only.
+
+### P2-8 React Router 7 — Open
+- **Current state:** two moderate advisories remain in react-router 6.x (GHSA-wrjc-x8rr-h8h6, GHSA-337j-9hxr-rhxg). They affect `<Link>` targets built from user input and data-router SSR hydration, neither of which this site uses.
+- **Change:** upgrade to React Router 7.18+ in its own PR (`StaticRouter` import path changes).
+- **Acceptance:** `npm audit --omit=dev` reports 0; all tests pass.
+
+### P2-9 Social preview image — Open
+- **Change:** a 1200 × 630 Open Graph image per page (or one for the site), from real brand assets.
 
 ### P2-7 Key-based deploy SSH — Open (Owner)
 - **Change:** replace `sshpass` password auth with an SSH deploy key held as a GitHub secret.

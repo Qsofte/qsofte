@@ -1,0 +1,473 @@
+{
+  "/": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte | Products that solve. Expertise that delivers.",
+    "description": "Qsofte builds Srovi, first-mile traceability for food supply chains, and Samewe, for residential communities. Qsofte Engineering builds alongside banks, merchants and public bodies.",
+    "canonical": "https://qsofte.com/",
+    "ogTitle": "Qsofte | Products that solve. Expertise that delivers.",
+    "jsonLd": true,
+    "h1InHtml": 1,
+    "textInHtml": 2962,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H2H3H3H3H3H3H2H3H3H3H3H2H2H2",
+      "title": "Qsofte | Products that solve. Expertise that delivers."
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H2H3H3H3H3H3H2H3H3H3H3H2H2H2",
+      "title": "Qsofte | Products that solve. Expertise that delivers."
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Products that solve. Expertise that delivers."
+      ],
+      "headings": "H1H2H3H3H2H3H3H3H3H3H2H3H3H3H3H2H2H2",
+      "title": "Qsofte | Products that solve. Expertise that delivers."
+    }
+  },
+  "/products": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Products | Qsofte",
+    "description": "Srovi for agriculture and food supply chains, and Samewe for residential communities. Products built by Qsofte.",
+    "canonical": "https://qsofte.com/products",
+    "ogTitle": "Products | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 1371,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Products"
+      ],
+      "headings": "H1H2H2H2H2H2",
+      "title": "Products | Qsofte"
+    }
+  },
+  "/srovi": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Srovi: first-mile traceability for fresh food | Qsofte",
+    "description": "Srovi records every hand-over from farm to dock on the producer’s phone, in a tamper-evident record, and gives every lot a passport buyers can check.",
+    "canonical": "https://qsofte.com/srovi",
+    "ogTitle": "Srovi: first-mile traceability for fresh food | Qsofte",
+    "jsonLd": true,
+    "h1InHtml": 1,
+    "textInHtml": 2759,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2",
+      "title": "Srovi: first-mile traceability for fresh food | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2",
+      "title": "Srovi: first-mile traceability for fresh food | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Trust at the first mile."
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H3H3H3H3H3H2H3H3H3H3H3H2H2H2H3H3H3H2H2H2",
+      "title": "Srovi: first-mile traceability for fresh food | Qsofte"
+    }
+  },
+  "/samewe": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Samewe: one app for a residential community | Qsofte",
+    "description": "Samewe is a Qsofte product in development for residential societies and residents’ welfare associations: residents and flats, maintenance billing, the gate, notices and more.",
+    "canonical": "https://qsofte.com/samewe",
+    "ogTitle": "Samewe: one app for a residential community | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 1366,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Samewe"
+      ],
+      "headings": "H1H2H3H3H3H2H2H2H2",
+      "title": "Samewe: one app for a residential community | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Samewe"
+      ],
+      "headings": "H1H2H3H3H3H2H2H2H2",
+      "title": "Samewe: one app for a residential community | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Samewe"
+      ],
+      "headings": "H1H2H3H3H3H2H2H2H2",
+      "title": "Samewe: one app for a residential community | Qsofte"
+    }
+  },
+  "/engineering": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Qsofte Engineering | Qsofte",
+    "description": "Qsofte Engineering: AI-native product engineering, payments and cards, agentic contact centres, point of sale and software testing.",
+    "canonical": "https://qsofte.com/engineering",
+    "ogTitle": "Qsofte Engineering | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 1975,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Qsofte Engineering"
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H2H3H3H3H3H2H2H2",
+      "title": "Qsofte Engineering | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Qsofte Engineering"
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H2H3H3H3H3H2H2H2",
+      "title": "Qsofte Engineering | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Qsofte Engineering"
+      ],
+      "headings": "H1H2H3H3H3H3H3H2H2H3H3H3H3H2H2H2",
+      "title": "Qsofte Engineering | Qsofte"
+    }
+  },
+  "/about": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "About | Qsofte",
+    "description": "Qsofte is a technology company that builds its own products, Srovi and Samewe, and an engineering practice that builds with others.",
+    "canonical": "https://qsofte.com/about",
+    "ogTitle": "About | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 1804,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "About Qsofte"
+      ],
+      "headings": "H1H2H2H3H3H3H3H2H3H3H3H2H2H2H2",
+      "title": "About | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "About Qsofte"
+      ],
+      "headings": "H1H2H2H3H3H3H3H2H3H3H3H2H2H2H2",
+      "title": "About | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "About Qsofte"
+      ],
+      "headings": "H1H2H2H3H3H3H3H2H3H3H3H2H2H2H2",
+      "title": "About | Qsofte"
+    }
+  },
+  "/contact": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Contact | Qsofte",
+    "description": "Talk to Qsofte about Srovi, Samewe or Qsofte Engineering.",
+    "canonical": "https://qsofte.com/contact",
+    "ogTitle": "Contact | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 710,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2",
+      "title": "Contact | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2",
+      "title": "Contact | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Let’s talk."
+      ],
+      "headings": "H1H2H2",
+      "title": "Contact | Qsofte"
+    }
+  },
+  "/privacy": {
+    "status": 200,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": "Privacy | Qsofte",
+    "description": "What personal information the Qsofte website collects, why, and what you can ask us to do with it.",
+    "canonical": "https://qsofte.com/privacy",
+    "ogTitle": "Privacy | Qsofte",
+    "jsonLd": false,
+    "h1InHtml": 1,
+    "textInHtml": 1397,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "Privacy"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Privacy | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "Privacy"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Privacy | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "Privacy"
+      ],
+      "headings": "H1H2H2H2H2H2H2H2",
+      "title": "Privacy | Qsofte"
+    }
+  },
+  "/services": {
+    "status": 301,
+    "location": "/engineering",
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": null,
+    "description": null,
+    "canonical": null,
+    "ogTitle": null,
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 0
+  },
+  "/industries": {
+    "status": 301,
+    "location": "/engineering",
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": null,
+    "description": null,
+    "canonical": null,
+    "ogTitle": null,
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 0
+  },
+  "/Connect": {
+    "status": 301,
+    "location": "/contact",
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": null,
+    "description": null,
+    "canonical": null,
+    "ogTitle": null,
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 0
+  },
+  "/nope": {
+    "status": 404,
+    "location": null,
+    "headers": {
+      "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io; frame-ancestors 'self'; base-uri 'self'; object-src 'none'",
+      "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+      "strict-transport-security": null,
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "referrer-policy": "strict-origin-when-cross-origin"
+    },
+    "title": null,
+    "description": null,
+    "canonical": null,
+    "ogTitle": null,
+    "jsonLd": false,
+    "h1InHtml": 0,
+    "textInHtml": 0,
+    "axe_phone": [],
+    "rendered_phone": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2",
+      "title": "Page not found | Qsofte"
+    },
+    "rendered_tablet": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2",
+      "title": "Page not found | Qsofte"
+    },
+    "axe_desktop": [],
+    "rendered_desktop": {
+      "overflowX": 0,
+      "h1": [
+        "This page doesn’t exist."
+      ],
+      "headings": "H1H2H2",
+      "title": "Page not found | Qsofte"
+    }
+  },
+  "consoleErrors_phone": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "consoleErrors_tablet": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "consoleErrors_desktop": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

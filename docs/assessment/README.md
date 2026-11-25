@@ -225,3 +225,93 @@ accessibility carry lower confidence because they rest on lab and automated data
   - No conversion measurement (a deliberate privacy choice; see `decisions.md`).
 
 The scorecard after implementation is at the end of this file.
+
+---
+
+## After implementation (branch `claude/adoring-allen-9snc20`)
+
+Measured with the same scripts against the new build, served through the production
+nginx configuration (including the new Content-Security-Policy). The browser audit
+context bypasses CSP only so that axe can be injected; the e2e suite separately
+confirms the CSP causes no violations.
+
+### Scorecard
+
+| Dimension | Weight | Before | After | What changed | Confidence |
+| --- | ---: | ---: | ---: | --- | --- |
+| Brand and positioning | 10% | 6.0 | 8.5 | Approved architecture in the navigation, product pages, About and footer; Samewe replaces RAM; distinct product marks under "A Qsofte product" | Medium |
+| UX and visual design | 15% | 7.5 | 8.5 | Consolidated information architecture; contrast fixed; product and status components; verified at 390, 768 and 1366 px | High |
+| Content and messaging | 10% | 5.0 | 8.0 | Unsupported claims removed; every claim sourced (`decisions.md`). Still relies on owner statements for payments depth and the contact-centre offer | High |
+| Product discoverability | 10% | 5.0 | 7.5 | Both products show problem, audience, status and a next step; Samewe module status; no real screenshots yet | High |
+| SEO | 10% | 4.0 | 9.0 | Prerendered HTML with unique metadata and canonicals; JSON-LD; generated sitemap; real 404s; 301s. Remaining: `www` DNS, social preview image | High |
+| Performance | 10% | 9.0 | 9.5 | Lighthouse 100 on every measured page and preset; home weight up 22 KiB (content now in the HTML). Lab only | Medium |
+| Accessibility | 10% | 7.0 | 8.5 | Zero axe WCAG 2.2 AA violations on every page at all three viewports; keyboard skip-link test. No manual screen-reader testing | Medium |
+| Technical architecture | 10% | 8.0 | 8.5 | Prerender without new runtime dependencies; production-faithful test server; 29 unit and 111 e2e tests; CI asserts 404s, 301s and headers | High |
+| Security and privacy | 10% | 4.0 | 6.5 | CSP and Permissions-Policy; high-severity advisories fixed; privacy notice; spam trap. **Capped** by the unrotated secret in git history (P0-1) | High |
+| Customer engagement | 5% | 6.0 | 7.5 | Topic routing, Samewe interest path, validated form with honest success and error states; no conversion measurement (by choice) | Medium |
+| **Weighted total** | 100% | **6.2** | **8.3** | | |
+
+### Measurements
+
+**Crawler view (raw HTML, no JavaScript)**
+
+| | Before | After |
+| --- | --- | --- |
+| Distinct titles across pages | 1 | 8 of 8 |
+| Canonical | `https://qsofte.com/` on every page | each page's own URL |
+| `<h1>` in raw HTML | 0 | 1 per page |
+| Visible text in raw HTML | 107 characters | 710–2,962 characters |
+| Structured data | none | Organization (home), SoftwareApplication (Srovi) |
+| Unknown URL | 200 (soft 404) | 404 |
+| Retired URLs (`/services`, `/industries`, `/Connect`) | 200, duplicate content | 301 to `/engineering` or `/contact` |
+
+**Accessibility (axe-core 4.10, WCAG 2.0–2.2 A/AA + best practice)**
+
+| | Before | After |
+| --- | --- | --- |
+| Pages with violations (phone and desktop) | 7 of 7 | 0 of 9 |
+| Colour-contrast failures (home / Srovi / contact) | 11 / 21 / 4 nodes | 0 |
+
+**Lighthouse 12.2 (lab, local server through the production nginx config)**
+
+| Page | Preset | Perf | A11y | Best pr. | SEO | LCP | CLS | TBT | Weight |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Home, before | Mobile | 99 | 95 | 100 | 100 | 1.7 s | 0 | 20 ms | 152 KiB |
+| Home, after | Mobile | 100 | 100 | 100 | 100 | 1.8 s | 0 | 10 ms | 174 KiB |
+| Home, before | Desktop | 100 | 95 | 100 | 100 | 0.4 s | 0 | 0 ms | 152 KiB |
+| Home, after | Desktop | 100 | 100 | 100 | 100 | 0.5 s | 0 | 0 ms | 174 KiB |
+| Srovi, before | Mobile | 99 | 96 | 100 | 100 | 2.0 s | 0 | 60 ms | 125 KiB |
+| Srovi, after | Mobile | 100 | 100 | 100 | 100 | 1.5 s | 0 | 0 ms | 133 KiB |
+| Samewe, after (new page) | Mobile | 100 | 100 | 100 | 100 | 1.4 s | 0 | 10 ms | 119 KiB |
+
+Run-to-run variation of ±0.1–0.2 s in LCP is normal for lab runs. Lighthouse
+scored SEO 100 before because it runs JavaScript; the crawler-view table shows
+the difference that non-rendering crawlers and link previews see.
+
+**Security headers (every response, including 404s)**
+
+| Header | Before | After |
+| --- | --- | --- |
+| Strict-Transport-Security, nosniff, X-Frame-Options, Referrer-Policy | yes | yes |
+| Content-Security-Policy | no | yes (`default-src 'self'`; Formspree for the form only) |
+| Permissions-Policy | no | yes |
+| `npm audit --omit=dev` | 3 high | 2 moderate (need React Router 7; see backlog P2-8) |
+
+### Screenshots
+
+`before/` and `after/` hold phone, tablet and desktop captures of every page
+(WebP, cropped to the top of each page).
+
+| Page | Before (desktop) | After (desktop) |
+| --- | --- | --- |
+| Home | ![](before/desktop_home.webp) | ![](after/desktop_home.webp) |
+| Products | ![](before/desktop_products.webp) | ![](after/desktop_products.webp) |
+| Samewe | n/a | ![](after/desktop_samewe.webp) |
+| Engineering (was Services) | ![](before/desktop_services.webp) | ![](after/desktop_engineering.webp) |
+
+### Limitations
+
+- Performance is lab data from a local server; real-user data (CrUX, INP) is not available for this origin.
+- Accessibility rests on automated checks, a keyboard test of the skip link and code review. Screen readers and 200% zoom were not tested by hand; WCAG 2.2 AA conformance is not claimed.
+- The live TLS certificate could not be inspected from the assessment environment (its proxy re-signs TLS); `cert-monitor.yml` checks it daily from GitHub.
+- Product claims are verified against code, not against production usage data.
