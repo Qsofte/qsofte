@@ -27,7 +27,7 @@ describe('site', () => {
   it('services page lists all services', () => {
     renderAt('/services');
     for (const title of [
-      'AI-native product development',
+      'AI-native product engineering',
       'Technology consultancy',
       'Point of sale',
       'Web and app development',
@@ -42,6 +42,7 @@ describe('site', () => {
     renderAt('/srovi');
     expect(screen.getByRole('heading', { level: 1, name: 'Trust at the first mile.' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Book a diagnostic' })).toBeTruthy();
+    expect(screen.getByAltText('Srovi')).toBeTruthy();
   });
 
   it('industries page lists banking and every speciality', () => {
@@ -55,6 +56,13 @@ describe('site', () => {
     renderAt('/');
     expect(screen.getByRole('heading', { level: 2, name: 'AI-native, from the first line.' })).toBeTruthy();
     expect(screen.getByRole('heading', { level: 3, name: 'Srovi is built this way.' })).toBeTruthy();
+  });
+
+  it('home presents the two lines of business, without the Srovi logo', () => {
+    renderAt('/');
+    expect(screen.getByText('Product development · AgriTech')).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 3, name: 'Partnering with you' })).toBeTruthy();
+    expect(screen.queryByAltText('Srovi')).toBeNull();
   });
 
   it('home does not lead with a location', () => {

@@ -64,9 +64,15 @@
 
 .home .home__arm p {
   color: var(--ink-2);
-  font-size: var(--text-lg);
-  max-width: 40ch;
+  max-width: 44ch;
   flex: 1;
+}
+
+.home .home__arm .home__arm-tagline {
+  flex: 0;
+  color: var(--ink);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
 }
 
 /* How we build: AI-native principles and the Srovi example */

@@ -3,10 +3,11 @@ import westpac from './assets/clients/westpac.webp';
 import chilliMasala from './assets/clients/chilli-masala.webp';
 import adyopant from './assets/clients/adyopant-legal.webp';
 import atmabodh from './assets/clients/atmabodh.webp';
+import sroviLogo from './assets/srovi-logo.webp';
 
 export const company = {
   name: 'Qsofte',
-  tagline: 'AI-native software, products and consultancy',
+  tagline: 'Product development and services & consulting',
   email: 'admin@qsofte.com',
   phone: '+64 22 414 2956',
   phoneHref: 'tel:+64224142956',
@@ -15,18 +16,18 @@ export const company = {
 };
 
 export const hero = {
-  eyebrow: 'AI-native software · Products and consultancy',
+  eyebrow: 'Product development · Services & consulting',
   title: 'Software, thoughtfully made.',
   lead:
-    'We build our own products, like Srovi, and the systems that banks, payments, government, agriculture and law firms depend on. AI-native from the first line, and checked by senior engineers at every step.',
+    'We build our own products, starting with Srovi for agriculture, and we partner with teams in banking, payments, government and law to deliver theirs. AI-native from the first line, with senior engineers accountable at every step.',
   primary: 'Start a conversation',
   secondary: 'See how we build',
 };
 
 export const home = {
   clientsLabel: 'Trusted by',
-  armsEyebrow: 'Two ways to work with us',
-  armsTitle: 'Products we own. Services we deliver.',
+  armsEyebrow: 'What we do',
+  armsTitle: 'Two lines of business. One standard of craft.',
   aiEyebrow: 'How we build',
   aiTitle: 'AI-native, from the first line.',
   aiLead:
@@ -51,8 +52,8 @@ export const home = {
 };
 
 export const servicesPage = {
-  title: 'Consultancy & services',
-  lead: 'Bring us in for one service or the whole journey. Either way, you work with a senior team that owns the outcome.',
+  title: 'Services & consulting',
+  lead: 'We partner with your team, for a single piece of work or the whole journey from strategy to launch. You work with senior people who own the outcome alongside you.',
 };
 
 export const contactPage = {
@@ -75,7 +76,7 @@ export const contactPage = {
 };
 
 export const callToAction = {
-  title: 'Have something in mind?',
+  title: 'Let’s build it together.',
   text: 'Tell us what you want to achieve. We’ll come back with a clear view of how to get there.',
   action: 'Start a conversation',
 };
@@ -87,7 +88,7 @@ export const notFound = {
 };
 
 export const footer = {
-  blurb: 'AI-native software, products and consultancy.',
+  blurb: 'We build products like Srovi, and partner with teams to deliver theirs.',
   productHeading: 'Product',
   industriesHeading: 'Industries',
   servicesHeading: 'Services',
@@ -144,22 +145,24 @@ export const aiPrinciples = [
   },
 ];
 
-export type Arm = { eyebrow: string; title: string; text: string; to: string; action: string };
+export type Arm = { eyebrow: string; title: string; tagline: string; text: string; to: string; action: string };
 
 export const arms: Arm[] = [
   {
-    eyebrow: 'Product',
+    eyebrow: 'Product development · AgriTech',
     title: 'Srovi',
-    text: 'Trust at the first mile. Traceability that starts on the producer’s phone and ends in a passport any buyer can check.',
+    tagline: 'First-mile traceability for fresh food.',
+    text: 'Buyers must prove where their food came from, but the record breaks at the farm gate. Srovi captures it there, on the producer’s phone, and gives every lot a passport buyers can check.',
     to: '/srovi',
     action: 'Discover Srovi',
   },
   {
-    eyebrow: 'Consultancy & services',
-    title: 'Senior teams, end to end',
-    text: 'Consultancy, product engineering, point of sale, OpenEMR and quality engineering, from one accountable team.',
+    eyebrow: 'Services & consulting',
+    title: 'Partnering with you',
+    tagline: 'Senior teams, working alongside yours.',
+    text: 'From strategy to launch and beyond: technology consulting, AI-native product engineering, point of sale, OpenEMR and quality engineering.',
     to: '/services',
-    action: 'Explore services',
+    action: 'Partner with us',
   },
 ];
 
@@ -269,9 +272,12 @@ export const work: CaseStudy[] = [
 ];
 
 export const srovi = {
-  eyebrow: 'Srovi · A Qsofte product',
+  logo: sroviLogo,
+  logoAlt: 'Srovi',
+  byline: 'A Qsofte product',
+  helper: 'First-mile traceability for fresh produce, poultry and seafood.',
   title: 'Trust at the first mile.',
-  tagline: 'From source to verified. For enterprise buyers of fresh produce, poultry and seafood.',
+  tagline: 'From source to verified, for enterprise food buyers.',
   lead: 'Buyers are asked to prove where their food came from. The proof breaks at the first mile, where nothing is recorded. Srovi records it there, on the producer’s phone, in a form no one can rewrite, and hands every lot a passport the buyer can check.',
   clientsLabel: 'Clients',
   clients: ['Blinkit', 'Flipkart', 'Proven in exports'],
@@ -346,9 +352,9 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: 'ai-native',
-    title: 'AI-native product development',
+    title: 'AI-native product engineering',
     summary:
-      'New products built the way we build our own: AI agents in the delivery team, senior engineers in charge, and automated guardrails on every change. Srovi is the proof.',
+      'We build your product the way we build our own: AI agents in the delivery team, senior engineers in charge, and automated guardrails on every change. Srovi is the proof.',
     points: [
       'AI agents that write, test and review, under senior engineers',
       'Plans that stay true to the code',
@@ -432,10 +438,10 @@ export const clients = [
 ];
 
 export const process = [
-  { title: 'Discover', text: 'We learn your business, your users and what success looks like.' },
-  { title: 'Plan', text: 'We agree the outcome, scope, cost and timeline, and write it down.' },
+  { title: 'Discover', text: 'We get to know your business, your users and what success looks like to you.' },
+  { title: 'Plan', text: 'Together we agree the outcome, scope, cost and timeline, and write it down.' },
   { title: 'Build', text: 'AI-native, in short cycles, so you see working software every week.' },
-  { title: 'Support', text: 'We stay after launch to keep things running and improving.' },
+  { title: 'Support', text: 'We stay with you after launch, keeping things running and improving.' },
 ];
 
 export const values = [

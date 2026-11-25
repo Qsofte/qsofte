@@ -8,8 +8,31 @@
   gap: var(--space-5);
 }
 
+.srovi .srovi__brand {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.srovi .srovi__brand img {
+  height: 48px;
+  width: auto;
+}
+
+.srovi .srovi__brand .eyebrow {
+  padding-left: var(--space-4);
+  border-left: var(--border);
+}
+
+.srovi .srovi__helper {
+  font-size: var(--text-lg);
+  color: var(--ink-2);
+  margin-bottom: var(--space-4);
+}
+
 .srovi .srovi__hero .display {
-  max-width: 12ch;
+  max-width: 16ch;
 }
 
 .srovi .srovi__tagline {
