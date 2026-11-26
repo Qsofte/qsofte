@@ -1,0 +1,17 @@
+.notes__filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.notes__selects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 720px) {
+  .notes__selects {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,15 @@
+# Payments Desk before its certificate exists: answer ACME challenges only.
+# Nothing is proxied over plain HTTP (passwords would cross the wire in clear).
+server {
+    listen 80;
+    server_name ${DESK_DOMAIN};
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        default_type text/plain;
+        return 503 "The Payments Desk is waiting for its certificate.\n";
+    }
+}

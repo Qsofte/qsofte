@@ -1,0 +1,16 @@
+.sign-in {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--space-7) var(--gutter);
+  background: var(--surface-2);
+}
+
+.sign-in__card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-7) var(--space-6);
+  border: var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}

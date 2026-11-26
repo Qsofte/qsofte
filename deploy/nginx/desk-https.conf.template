@@ -1,0 +1,56 @@
+# Payments Desk (private): TLS here, everything else in the desk container.
+limit_req_zone $binary_remote_addr zone=desk_login:10m rate=10r/m;
+
+server {
+    listen 80;
+    server_name ${DESK_DOMAIN};
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${DESK_DOMAIN};
+
+    ssl_certificate /etc/letsencrypt/live/${DESK_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DESK_DOMAIN}/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    client_max_body_size 1m;
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+
+    # Resolve the desk container at request time, so nginx starts even while it is down.
+    resolver 127.0.0.11 valid=30s ipv6=off;
+    set $desk http://desk:8000;
+
+    location = /api/auth/login {
+        limit_req zone=desk_login burst=5 nodelay;
+        limit_req_status 429;
+        proxy_pass $desk;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location / {
+        proxy_pass $desk;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 60s;
+    }
+}

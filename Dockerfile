@@ -8,7 +8,7 @@ RUN npm run build
 
 FROM nginx:1.27-alpine
 RUN rm -f /etc/nginx/conf.d/default.conf
-COPY deploy/nginx/http.conf.template deploy/nginx/https.conf.template /etc/nginx/qsofte/
+COPY deploy/nginx/*.conf.template /etc/nginx/qsofte/
 COPY deploy/nginx/entrypoint.sh /qsofte-entrypoint.sh
 COPY --from=build /app/dist /usr/share/nginx/html
 RUN chmod +x /qsofte-entrypoint.sh && mkdir -p /var/www/certbot

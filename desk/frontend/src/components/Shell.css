@@ -1,0 +1,116 @@
+.shell__skip {
+  position: absolute;
+  left: -9999px;
+}
+
+.shell__skip:focus {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 100;
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface);
+}
+
+.shell__header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--glass);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: var(--border);
+}
+
+.shell__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--header-h);
+}
+
+.shell__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-snug);
+  text-decoration: none;
+}
+
+.shell__mark {
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+.shell__by {
+  color: var(--ink-3);
+  font-weight: var(--weight-regular);
+}
+
+.shell__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.shell__account,
+.shell__signout {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.shell__account:hover,
+.shell__signout:hover {
+  color: var(--ink);
+}
+
+.shell__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-5);
+}
+
+.shell__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-sm);
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.shell__nav a:hover {
+  color: var(--ink);
+}
+
+.shell__nav a.active {
+  color: var(--ink);
+  font-weight: var(--weight-medium);
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .shell__by {
+    display: none;
+  }
+
+  .shell__nav {
+    gap: 0 var(--space-4);
+  }
+}

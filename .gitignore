@@ -12,3 +12,6 @@ deploy/certbot/conf/
 deploy/certbot/www/
 deploy/nginx/nginx.conf
 *.tsbuildinfo
+__pycache__/
+.pytest_cache/
+desk/backend/static/

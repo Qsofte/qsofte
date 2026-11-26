@@ -1,6 +1,10 @@
 # Production stack: one nginx container (static site + TLS) and a certbot
 # container that renews certificates every 12h. State lives in SHARED_DIR.
-# The web image is built in CI and loaded onto the server (IMAGE_TAG).
+# The web and desk images are built in CI and loaded onto the server (IMAGE_TAG).
+#
+# The Payments Desk (profile "desk", on when DESK_DOMAIN is set): the desk app,
+# its Postgres and a daily dump. Its secrets live in SHARED_DIR/desk/desk.env,
+# written by the deploy workflow from GitHub secrets, never in this repository.
 name: qsofte
 
 x-logging: &logging
@@ -19,6 +23,7 @@ services:
     logging: *logging
     environment:
       DOMAIN: ${DOMAIN:?set DOMAIN}
+      DESK_DOMAIN: ${DESK_DOMAIN:-}
     ports:
       - "80:80"
       - "443:443"
@@ -34,3 +39,48 @@ services:
       - ${SHARED_DIR:-/opt/qsofte/shared}/letsencrypt:/etc/letsencrypt
       - ${SHARED_DIR:-/opt/qsofte/shared}/certbot-www:/var/www/certbot
     entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done"]
+
+  desk:
+    profiles: [desk]
+    image: qsofte-desk:${IMAGE_TAG:-latest}
+    restart: always
+    logging: *logging
+    env_file: ${SHARED_DIR:-/opt/qsofte/shared}/desk/desk.env
+    environment:
+      DESK_ENVIRONMENT: production
+      DESK_COOKIE_SECURE: "true"
+    depends_on:
+      desk-db:
+        condition: service_healthy
+    # No published port: only nginx, on the same network, reaches it.
+
+  desk-db:
+    profiles: [desk]
+    image: postgres:16-alpine
+    restart: always
+    logging: *logging
+    env_file: ${SHARED_DIR:-/opt/qsofte/shared}/desk/desk.env
+    environment:
+      POSTGRES_USER: desk
+      POSTGRES_DB: desk
+    volumes:
+      - ${SHARED_DIR:-/opt/qsofte/shared}/desk/db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U desk -d desk"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # A compressed dump every 24h, kept 14 days, in SHARED_DIR/desk/backups.
+  desk-backup:
+    profiles: [desk]
+    image: postgres:16-alpine
+    restart: always
+    logging: *logging
+    env_file: ${SHARED_DIR:-/opt/qsofte/shared}/desk/desk.env
+    volumes:
+      - ${SHARED_DIR:-/opt/qsofte/shared}/desk/backups:/backups
+    depends_on:
+      desk-db:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c", "trap exit TERM; while :; do PGPASSWORD=\"$$POSTGRES_PASSWORD\" pg_dump -h desk-db -U desk desk | gzip > /backups/desk-$$(date +%F).sql.gz && find /backups -name 'desk-*.sql.gz' -mtime +14 -delete; sleep 24h & wait $${!}; done"]

@@ -1,0 +1,14 @@
+# Local Postgres for Desk development: docker compose -f desk/docker-compose.dev.yml up -d
+services:
+  desk-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: desk
+      POSTGRES_PASSWORD: desk
+      POSTGRES_DB: desk
+    ports:
+      - "5433:5432"
+    volumes:
+      - desk_dev_db:/var/lib/postgresql/data
+volumes:
+  desk_dev_db:

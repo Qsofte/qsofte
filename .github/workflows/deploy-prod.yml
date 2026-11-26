@@ -17,6 +17,8 @@ concurrency:
 env:
   DOMAIN: ${{ vars.PROD_DOMAIN || 'qsofte.com' }}
   SSL_EMAIL: ${{ vars.SSL_EMAIL || 'admin@qsofte.com' }}
+  # The Payments Desk deploys only once its secrets exist (see desk/README.md).
+  DESK_DOMAIN_WANTED: ${{ vars.DESK_DOMAIN || 'payments.desk.qsofte.com' }}
 
 jobs:
   confirm:
@@ -40,8 +42,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build production image
-        run: docker build -t "qsofte-web:${GITHUB_SHA}" .
+      - name: Build production images
+        run: |
+          docker build -t "qsofte-web:${GITHUB_SHA}" .
+          docker build -t "qsofte-desk:${GITHUB_SHA}" desk
+
+      - name: Decide whether the Payments Desk ships
+        env:
+          HAS_KEY: ${{ secrets.DESK_SECRET_KEY != '' && secrets.DESK_DB_PASSWORD != '' }}
+        run: |
+          if [ "$HAS_KEY" = "true" ]; then
+            echo "DESK_DOMAIN=$DESK_DOMAIN_WANTED" >> "$GITHUB_ENV"
+          else
+            echo "DESK_DOMAIN=" >> "$GITHUB_ENV"
+            echo "::warning::Payments Desk skipped: add the DESK_SECRET_KEY and DESK_DB_PASSWORD secrets to deploy it."
+          fi
 
       - name: Install sshpass
         run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
@@ -58,15 +73,30 @@ jobs:
         env:
           SSHPASS: ${{ secrets.SERVER_PASSWORD }}
           TARGET: ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}
+          DESK_SECRET_KEY: ${{ secrets.DESK_SECRET_KEY }}
+          DESK_DB_PASSWORD: ${{ secrets.DESK_DB_PASSWORD }}
+          DESK_ADMIN_EMAIL: ${{ secrets.DESK_ADMIN_EMAIL }}
+          DESK_ADMIN_PASSWORD: ${{ secrets.DESK_ADMIN_PASSWORD }}
         run: |
           REL=/opt/qsofte/releases/${GITHUB_SHA}
           ssh_() { sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 "$TARGET" "$@"; }
           # Prefix for privileged commands when the deploy user is not root
           PRIV='S=""; [ "$(id -u)" -ne 0 ] && S="sudo -n";'
           docker save "qsofte-web:${GITHUB_SHA}" | gzip | ssh_ "gunzip | docker load"
+          if [ -n "$DESK_DOMAIN" ]; then
+            docker save "qsofte-desk:${GITHUB_SHA}" | gzip | ssh_ "gunzip | docker load"
+            # Secrets go over stdin into a root-only file; never on a command line or in the repo.
+            {
+              echo "DESK_SECRET_KEY=$DESK_SECRET_KEY"
+              echo "POSTGRES_PASSWORD=$DESK_DB_PASSWORD"
+              echo "DESK_DATABASE_URL=postgresql+asyncpg://desk:$DESK_DB_PASSWORD@desk-db:5432/desk"
+              echo "DESK_ADMIN_EMAIL=$DESK_ADMIN_EMAIL"
+              echo "DESK_ADMIN_PASSWORD=$DESK_ADMIN_PASSWORD"
+            } | ssh_ "$PRIV \$S mkdir -p /opt/qsofte/shared/desk && umask 077 && \$S tee /opt/qsofte/shared/desk/desk.env >/dev/null && \$S chmod 600 /opt/qsofte/shared/desk/desk.env"
+          fi
           ssh_ "$PRIV \$S mkdir -p $REL && \$S chown \"\$(id -un)\" $REL"
           git archive --format=tar HEAD | ssh_ "tar -x -C $REL"
-          ssh_ "cd $REL && IMAGE_TAG='${GITHUB_SHA}' DOMAIN='$DOMAIN' SSL_EMAIL='$SSL_EMAIL' bash deploy/deploy.sh"
+          ssh_ "cd $REL && IMAGE_TAG='${GITHUB_SHA}' DOMAIN='$DOMAIN' DESK_DOMAIN='$DESK_DOMAIN' SSL_EMAIL='$SSL_EMAIL' bash deploy/deploy.sh"
 
       - name: Verify HTTPS and certificate
         run: |
@@ -74,6 +104,17 @@ jobs:
           curl -fsS "https://$DOMAIN/healthz"
           echo | openssl s_client -connect "$DOMAIN:443" -servername "$DOMAIN" 2>/dev/null \
             | openssl x509 -noout -subject -enddate -checkend 1209600
+
+      - name: Check the Payments Desk
+        if: env.DESK_DOMAIN != ''
+        run: |
+          # A warning, not a failure: the Desk needs its DNS record before it can have HTTPS.
+          if curl -fsS "https://$DESK_DOMAIN/healthz"; then
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://$DESK_DOMAIN/api/today")
+            [ "$code" = 401 ] || { echo "Desk API answered $code without a session; expected 401"; exit 1; }
+          else
+            echo "::warning::https://$DESK_DOMAIN is not answering yet. Check its DNS A record."
+          fi
 
       - uses: actions/setup-node@v4
         with:

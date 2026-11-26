@@ -37,7 +37,71 @@ jobs:
         run: docker build -t qsofte-web:ci .
       - name: Smoke test image (HTTP mode, no cert)
         run: |
-          docker run -d --name web -e DOMAIN=localhost -p 8080:80 qsofte-web:ci
+          docker run -d --name web -e DOMAIN=localhost -e DESK_DOMAIN=desk.localhost -p 8080:80 qsofte-web:ci
           for i in $(seq 1 20); do curl -fsS http://localhost:8080/healthz && break; sleep 1; done
           curl -fsS http://localhost:8080/services | grep -q '<div id="root">'
           docker exec web nginx -t
+          # The Desk's HTTP-only vhost serves nothing until it has a certificate.
+          [ "$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: desk.localhost' http://localhost:8080/)" = 503 ]
+      - name: Check the Desk's HTTPS vhost parses
+        run: |
+          docker exec web sh -c 'apk add -q openssl >/dev/null && mkdir -p /etc/letsencrypt/live/desk.localhost \
+            && openssl req -x509 -newkey rsa:2048 -nodes -days 1 -subj /CN=desk.localhost \
+               -keyout /etc/letsencrypt/live/desk.localhost/privkey.pem -out /etc/letsencrypt/live/desk.localhost/fullchain.pem 2>/dev/null \
+            && DESK_DOMAIN=desk.localhost envsubst "\$DESK_DOMAIN" < /etc/nginx/qsofte/desk-https.conf.template > /etc/nginx/conf.d/desk.conf \
+            && nginx -t'
+
+  desk:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: desk
+          POSTGRES_PASSWORD: desk
+          POSTGRES_DB: desk
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U desk" --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: desk/backend/requirements*.txt
+      - name: Backend tests
+        working-directory: desk/backend
+        run: |
+          pip install -r requirements-test.txt
+          python -m pytest -q
+      - name: Migrations run on Postgres and match the models
+        working-directory: desk/backend
+        env:
+          DESK_DATABASE_URL: postgresql+asyncpg://desk:desk@localhost:5432/desk
+        run: |
+          alembic upgrade head
+          alembic check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desk/frontend/package-lock.json
+      - name: Frontend typecheck, tests, build
+        working-directory: desk/frontend
+        run: |
+          npm ci
+          npm run check
+      - name: Build and smoke test the desk image
+        run: |
+          docker build -t qsofte-desk:ci desk
+          docker run -d --name desk --network host \
+            -e DESK_DATABASE_URL=postgresql+asyncpg://desk:desk@localhost:5432/desk \
+            -e DESK_SECRET_KEY=ci-only-secret-key-ci-only-secret-key \
+            -e DESK_ADMIN_EMAIL=ci@example.com -e DESK_ADMIN_PASSWORD=ci-only-password-123 \
+            qsofte-desk:ci
+          for i in $(seq 1 30); do curl -fsS http://localhost:8000/healthz && break; sleep 1; done
+          curl -fsS http://localhost:8000/ | grep -q '<div id="root">'
+          [ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8000/api/today)" = 401 ]
+          code=$(curl -s -o /dev/null -w '%{http_code}' -H 'X-Desk-Request: 1' -H 'Content-Type: application/json' \
+            -d '{"email":"ci@example.com","password":"ci-only-password-123"}' http://localhost:8000/api/auth/login)
+          [ "$code" = 200 ] || { docker logs desk; exit 1; }

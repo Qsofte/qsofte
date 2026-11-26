@@ -6,6 +6,13 @@ Marketing site for qsofte.com. Vite + React 18 + TypeScript, plain CSS, no UI fr
 **Any UI or copy change follows `.claude/skills/ui-change`** and passes `.claude/scripts/ui-check.sh`
 before it is pushed. A hook runs the design guard after every edit under `src/`.
 
+## Payments Desk (`desk/`)
+
+A separate private app at payments.desk.qsofte.com (FastAPI + Postgres + React 19). Read
+`desk/README.md`. The public site's rules on design apply to it too. Its data lives only in
+the server's Postgres: this repo is public, so never commit notes, positions or accounts.
+Checks: `cd desk/backend && python -m pytest -q` and `cd desk/frontend && npm run check`.
+
 ## Commands
 
 - `npm run check` (typecheck + vitest + build). Run before every push.
