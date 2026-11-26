@@ -3,6 +3,7 @@
 from datetime import date, datetime, timezone
 
 from sqlalchemy import JSON, Column, Computed, Date, DateTime, ForeignKey, Index, Integer, String, Table, Text, UniqueConstraint
+from pgvector.sqlalchemy import Vector
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -231,3 +232,33 @@ class FeedItem(Base):
     note_id: Mapped[int | None] = mapped_column(ForeignKey("notes.id", ondelete="SET NULL"))
 
     feed: Mapped[Feed] = relationship()
+
+
+EMBED_DIM = 384  # BAAI/bge-small-en-v1.5; changing the model's size needs a migration
+
+
+class SearchChunk(Base):
+    """A piece of a searchable row with its embedding, for meaning-based search.
+
+    A cache derived from the source rows by app.semantic.reindex, never written by hand: rows are
+    re-embedded when their content hash (or the model) changes, and removed when the row goes.
+    """
+
+    __tablename__ = "search_chunks"
+    __table_args__ = (
+        UniqueConstraint("kind", "ref_id", "chunk_no"),
+        Index("ix_search_chunks_ref", "kind", "ref_id"),
+        Index("ix_search_chunks_embedding", "embedding", postgresql_using="hnsw",
+              postgresql_with={"m": 16, "ef_construction": 64},
+              postgresql_ops={"embedding": "vector_cosine_ops"}),
+    )
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    kind: Mapped[str] = mapped_column(String(20))
+    ref_id: Mapped[str] = mapped_column(String(80))
+    chunk_no: Mapped[int] = mapped_column(Integer)
+    text: Mapped[str] = mapped_column(Text)
+    content_hash: Mapped[str] = mapped_column(String(64))
+    model: Mapped[str] = mapped_column(String(100))
+    embedding: Mapped[list[float]] = mapped_column(Vector(EMBED_DIM))
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

@@ -126,6 +126,7 @@ export interface SearchHit {
   href: string;
   date: string | null;
   score: number;
+  match: 'words' | 'meaning' | 'both' | 'close';
 }
 
 export interface Answer {

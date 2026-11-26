@@ -8,8 +8,11 @@
 - A word that matches nothing is corrected against the Desk's own vocabulary with trigram
   similarity (pg_trgm): "remitance" becomes "remittance", and the page says so.
 - When exact matching still finds little, titles are matched by trigram similarity too.
+- Documents close in meaning (semantic.py, pgvector) join the keyword results, and the two
+  rankings merge by reciprocal rank fusion (rules.fuse). Each hit says how it matched.
 """
 
+import logging
 import re
 from dataclasses import dataclass, field
 from functools import reduce
@@ -20,13 +23,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from .models import Domain, Event, FeedItem, Guide, Initiative, Note
-from .rules import Query, expand, fold
+from . import semantic
+from .rules import Query, expand, fold, fuse
 from .schemas import SearchHit
+
+log = logging.getLogger("desk.search")
 
 CONFIG = literal_column("'desk'::regconfig")
 PER_TABLE = 30
 FUZZY_BELOW = 3        # run the typo-tolerant pass when exact matching finds fewer hits than this
-FUZZY_SIMILARITY = 0.5
+FUZZY_SIMILARITY = 0.6  # "staff" vs "Stablecoin" is 0.5; real typos score 0.75+
 MARK_START, MARK_END = "\x02", "\x03"
 HEADLINE = (f"StartSel={MARK_START}, StopSel={MARK_END}, MaxWords=32, MinWords=12, "
             'MaxFragments=2, FragmentDelimiter=" … "')
@@ -44,16 +50,18 @@ class Doc:
     score: float = 0.0
     snippet: str = ""
     fuzzy: bool = False
+    match: str = "words"  # words | meaning | both | close (typo-tolerant title match)
 
     def hit(self) -> SearchHit:
         return SearchHit(kind=self.kind, id=self.id, title=self.title, snippet=self.snippet,
-                         href=self.href, date=self.date, score=round(self.score, 4))
+                         href=self.href, date=self.date, score=round(self.score, 4), match=self.match)
 
 
 def plain(text: str) -> str:
     """Markdown to plain text for snippets: links keep their label, marks and heading hashes go."""
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text or "")
     text = re.sub(r"(?m)^\s*(#{1,6}|[-*]|\d+[.)])\s+", "", text)
+    text = re.sub(r"(^|\s)#{1,6}\s", " ", text)  # a heading inside a fragment from ts_headline
     return re.sub(r"[*`]", "", text)
 
 
@@ -71,6 +79,8 @@ def clean_headline(raw: str) -> str:
 
 @dataclass
 class Source:
+    kind: str
+    key: Any                        # the column Doc.id comes from (slug or id)
     model: Any
     title: Any                      # column used for typo-tolerant title matching
     headline: list                  # columns ts_headline picks the snippet from
@@ -118,14 +128,39 @@ def _feed(f: FeedItem) -> Doc:
 
 
 SOURCES = [
-    Source(Domain, Domain.name, [Domain.position, Domain.summary, Domain.open_questions], _domain),
-    Source(Initiative, Initiative.name, [Initiative.summary, Initiative.lead, Initiative.participants], _initiative),
-    Source(Note, Note.title, [Note.so_what, Note.body], _note),
-    Source(Guide, Guide.title, [Guide.summary, Guide.body], _guide),
-    Source(Event, Event.name, [Event.why, Event.goal], _event),
-    Source(FeedItem, FeedItem.title, [FeedItem.summary], _feed,
+    Source("domain", Domain.slug, Domain, Domain.name, [Domain.position, Domain.summary, Domain.open_questions], _domain),
+    Source("initiative", Initiative.slug, Initiative, Initiative.name,
+           [Initiative.summary, Initiative.lead, Initiative.participants], _initiative),
+    Source("note", Note.id, Note, Note.title, [Note.so_what, Note.body], _note),
+    Source("guide", Guide.slug, Guide, Guide.title, [Guide.summary, Guide.body], _guide),
+    Source("event", Event.id, Event, Event.name, [Event.why, Event.goal], _event),
+    Source("feed", FeedItem.id, FeedItem, FeedItem.title, [FeedItem.summary], _feed,
            where=[FeedItem.state != "dismissed"], options=[selectinload(FeedItem.feed)]),
 ]
+BY_KIND = {s.kind: s for s in SOURCES}
+
+
+async def load_docs(db: AsyncSession, keys: list[tuple[str, str]]) -> dict[tuple[str, str], Doc]:
+    """Docs for (kind, id) pairs, skipping any that no longer exist or are hidden (dismissed news)."""
+    out: dict[tuple[str, str], Doc] = {}
+    for kind in {k for k, _ in keys}:
+        s = BY_KIND[kind]
+        ids = [i for k, i in keys if k == kind]
+        if s.key.type.python_type is int:
+            ids = [int(i) for i in ids if i.isdigit()]
+        rows = (await db.scalars(select(s.model).options(*s.options).where(s.key.in_(ids), *s.where))).all()
+        for row in rows:
+            doc = s.to_doc(row)
+            out[(doc.kind, doc.id)] = doc
+    return out
+
+
+async def all_docs(db: AsyncSession) -> list[Doc]:
+    """Every searchable document, for the meaning index."""
+    docs: list[Doc] = []
+    for s in SOURCES:
+        docs += [s.to_doc(r) for r in (await db.scalars(select(s.model).options(*s.options).where(*s.where))).all()]
+    return docs
 
 
 # --------------------------------------------------------------------------- queries
@@ -188,7 +223,7 @@ async def _fuzzy(db: AsyncSession, q: Query) -> list[Doc]:
                 .where(sim >= FUZZY_SIMILARITY, *s.where).order_by(sim.desc()).limit(5))
         for row, score in (await db.execute(stmt)).all():
             doc = s.to_doc(row)
-            doc.score, doc.snippet, doc.fuzzy = float(score) / 10, snippet(doc.text), True
+            doc.score, doc.snippet, doc.fuzzy, doc.match = float(score) / 10, snippet(doc.text), True, "close"
             docs.append(doc)
     return docs
 
@@ -236,6 +271,44 @@ class Result:
     corrected: str | None = None    # the query as searched, when misspelt words were corrected
 
 
+SEMANTIC_MIN = 0.6     # below this, a "nearest" document is not really related (measured on bge-small)
+SEMANTIC_SPREAD = 0.1  # and keep only those within this of the best one
+SEMANTIC_TOP = 20
+
+
+async def _with_meaning(db: AsyncSession, q: str, exact: list[Doc]) -> list[Doc]:
+    """Adds documents related by meaning and re-ranks both lists by reciprocal rank fusion."""
+    embedder = semantic.get_embedder()
+    if embedder is None:
+        return exact
+    try:
+        near = await semantic.nearest(db, embedder, q)
+    except Exception:
+        log.exception("meaning search failed; showing keyword results")
+        return exact
+    if not near:
+        return exact
+    floor = max(SEMANTIC_MIN, near[0].similarity - SEMANTIC_SPREAD)
+    near = [n for n in near if n.similarity >= floor][:SEMANTIC_TOP]
+    by_key = {(d.kind, d.id): d for d in exact}
+    missing = [(n.kind, n.ref_id) for n in near if (n.kind, n.ref_id) not in by_key]
+    loaded = await load_docs(db, missing) if missing else {}
+    for n in near:
+        key = (n.kind, n.ref_id)
+        if key in by_key:
+            by_key[key].match = "both"
+        elif key in loaded:
+            doc = loaded[key]
+            doc.match = "meaning"
+            # The chunk that matched, without its title line, is the best snippet.
+            doc.snippet = snippet(n.text.split("\n", 1)[-1])
+            by_key[key] = doc
+    scores = fuse([[(d.kind, d.id) for d in exact], [(n.kind, n.ref_id) for n in near if (n.kind, n.ref_id) in by_key]])
+    for key, doc in by_key.items():
+        doc.score = scores.get(key, 0.0)
+    return sorted(by_key.values(), key=lambda d: (-d.score, d.kind, d.title))
+
+
 async def search(db: AsyncSession, q: str, limit: int = 40) -> Result:
     aliases = await alias_groups(db)
     query = expand(q, aliases)
@@ -247,6 +320,7 @@ async def search(db: AsyncSession, q: str, limit: int = 40) -> Result:
         corrected = " ".join(fixes.get(t, t) for t in query.terms)
         query = expand(corrected, aliases)
     docs = sorted(await _exact(db, query), key=lambda d: (-d.score, d.kind, d.title))
+    docs = await _with_meaning(db, corrected or q, docs)
     fuzzy = False
     if len(docs) < FUZZY_BELOW:
         seen = {(d.kind, d.id) for d in docs}

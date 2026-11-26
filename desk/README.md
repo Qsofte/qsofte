@@ -68,8 +68,26 @@ Postgres full-text search, with no extra service to run:
   ("remitance" → "remittance") and the page says so; if matches are still few, close titles are
   added.
 
-Later, for meaning-based search: add `pgvector` (swap the image to `pgvector/pgvector:pg16`),
-store an embedding per row from a small open-source model, and merge its ranking with this one.
+**Meaning-based search** runs alongside, so a question finds the right guide even when it
+shares no words with it ("how do banks move money across borders faster?" finds the
+cross-border primer):
+
+- Model: `BAAI/bge-small-en-v1.5` (open source, about 65 MB, 384 dimensions) through fastembed
+  on the server's CPU. It is baked into the desk image; nothing is sent to an outside service.
+- `search_chunks` (migration 0004) holds paragraph-sized chunks of every searchable row with
+  their embeddings, in pgvector with an HNSW index. It is a cache of the rows: the background
+  indexer (`app/semantic.py`, every 10 minutes) embeds only what is new or changed, by content
+  hash, and removes what is gone. `python -m app.cli reindex` runs it now.
+- Search takes the nearest chunks (similarity 0.6 or more, measured on this model) and merges
+  them with the keyword results by reciprocal rank fusion. Results found only by meaning are
+  labelled *Related in meaning*. Ask uses the same merged results for its sources.
+- Costs (measured): about 220 MB more image (the model and its runtime), about 210 MB more
+  memory once the model loads, and about 5 seconds to embed 150 documents on 2 threads. If the model cannot load, meaning search switches itself
+  off and keyword search carries on. `DESK_SEMANTIC=false` turns it off.
+
+The database image is `pgvector/pgvector` (Postgres 16 with pgvector, Debian-based) for both
+`desk-db` and the backup job. Migration 0004 rebuilds text indexes because sort order differs
+from the Alpine image used before.
 
 ## Ask
 
@@ -138,9 +156,10 @@ uvicorn app.main:app --reload --port 8000                      # API docs at /ap
 cd ../frontend && npm install && npm run dev                   # http://localhost:5174
 ```
 
-Checks (CI runs all of these). Backend tests need Postgres, because search uses its full-text
-search: they rebuild the `desk_test` database on the dev Postgres (:5433) each run, or the one
-named in `DESK_TEST_DATABASE_URL`.
+Checks (CI runs all of these). Backend tests need Postgres with pgvector (the dev compose
+one): they rebuild the `desk_test` database on it (:5433) each run, or the one named in
+`DESK_TEST_DATABASE_URL`. Meaning search is tested with a fake embedder; set
+`DESK_EMBED_CACHE` to a folder holding the real model to run its test too.
 
 ```bash
 cd desk/backend && python -m pytest -q                         # API, auth, rules, search, migrations

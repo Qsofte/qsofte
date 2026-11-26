@@ -442,6 +442,7 @@ class SearchHit(BaseModel):
     href: str  # in-app path, or the article link for feed items
     date: str | None = None
     score: float
+    match: str = "words"  # words | meaning | both | close
 
 
 class SearchOut(BaseModel):

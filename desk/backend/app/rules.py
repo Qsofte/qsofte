@@ -211,3 +211,15 @@ def expand(q: str, alias_groups: list[list[str]] | None = None) -> Query:
     for names in alias_groups or []:
         extra += [names[0] for n in names if " " in n and n in folded]
     return Query(groups=groups, extra=list(dict.fromkeys(extra)))
+
+
+def fuse(rankings: list[list], k: int = 60) -> dict:
+    """Reciprocal rank fusion: merges ranked lists by position, not by their incomparable scores.
+
+    An item ranked r in a list earns 1 / (k + r); items found by several lists add up.
+    """
+    scores: dict = {}
+    for ranking in rankings:
+        for r, key in enumerate(ranking, start=1):
+            scores[key] = scores.get(key, 0.0) + 1.0 / (k + r)
+    return scores

@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 
 from .config import get_settings
-from . import feeds
+from . import feeds, semantic
 from .db import dispose, sessionmaker
 from .routes import auth, domains, events, guides, initiatives, notes, search, today
 from .routes import feeds as feed_routes
@@ -23,11 +23,13 @@ from .security import require_write_header
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     s = get_settings()
-    task = None
+    tasks = []
     if s.feed_interval_minutes > 0:
-        task = asyncio.create_task(feeds.run_forever(sessionmaker(), s.feed_interval_minutes))
+        tasks.append(asyncio.create_task(feeds.run_forever(sessionmaker(), s.feed_interval_minutes)))
+    if s.semantic and s.embed_interval_minutes > 0:
+        tasks.append(asyncio.create_task(semantic.run_forever(sessionmaker(), s.embed_interval_minutes)))
     yield
-    if task:
+    for task in tasks:
         task.cancel()
     await dispose()
 

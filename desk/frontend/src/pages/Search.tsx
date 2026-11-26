@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { api, type Answer, type SearchHit } from '../api';
 import Markdown from '../components/Markdown';
-import { copy, hitKinds } from '../content';
+import { copy, hitKinds, hitMatch } from '../content';
 import { day } from '../format';
 import { useLoad, usePageTitle } from '../useLoad';
 import './Search.css';
@@ -38,6 +38,7 @@ function Hits({ hits, numbered = false }: { hits: SearchHit[]; numbered?: boolea
           <div className="search__meta">
             {numbered && <span className="search__num">{n + 1}</span>}
             <span className="tag">{hitKinds[h.kind]}</span>
+            {(h.match === 'meaning' || h.match === 'close') && <span className="tag tag--mark">{hitMatch[h.match]}</span>}
             {h.date && <span className="mono">{day(h.date)}</span>}
           </div>
           <HitTitle hit={h} />

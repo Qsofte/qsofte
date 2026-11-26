@@ -33,6 +33,13 @@ class Settings(BaseSettings):
     anthropic_api_key: str | None = None
     ask_model: str = "claude-opus-5-5"
     ask_per_hour: int = 30
+    # Meaning-based search: an open-source embedding model on the server's CPU, vectors in pgvector.
+    semantic: bool = True
+    embed_model: str = "BAAI/bge-small-en-v1.5"  # 384 dimensions, as models.EMBED_DIM
+    # Where the model files live; the Docker image bakes them in at /app/models.
+    embed_cache: Path | None = None
+    # How often new and changed content is embedded; 0 turns the background indexer off.
+    embed_interval_minutes: int = 10
 
     @property
     def is_production(self) -> bool:

@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16-alpine
+        image: pgvector/pgvector:0.8.6-pg16-bookworm
         env:
           POSTGRES_USER: desk
           POSTGRES_PASSWORD: desk
@@ -118,3 +118,7 @@ jobs:
           code=$(curl -s -o /dev/null -w '%{http_code}' -H 'X-Desk-Request: 1' -H 'Content-Type: application/json' \
             -d '{"email":"ci@example.com","password":"ci-only-password-123"}' http://localhost:8000/api/auth/login)
           [ "$code" = 200 ] || { docker logs desk; exit 1; }
+      - name: The embedding model loads with no network (baked into the image)
+        run: |
+          docker run --rm --network none qsofte-desk:ci python -c \
+            "from app.semantic import Embedder; e = Embedder('BAAI/bge-small-en-v1.5', '/app/models'); assert len(e.query('instant payments')) == 384; print('model ok')"

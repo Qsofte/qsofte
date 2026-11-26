@@ -102,3 +102,9 @@ def test_snippets_are_plain_text():
     from app.search import snippet
     out = snippet("## The idea\n\n- **Atomic** settlement via [Agorá](https://bis.org) and `code`")
     assert out == "The idea Atomic settlement via Agorá and code"
+
+
+def test_headings_inside_snippet_fragments_are_removed():
+    from app.search import clean_headline
+    assert clean_headline("links work across borders. ## Two ways a QR payment works") == \
+        "links work across borders. Two ways a QR payment works"

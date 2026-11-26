@@ -1,7 +1,7 @@
 # Local Postgres for Desk development: docker compose -f desk/docker-compose.dev.yml up -d
 services:
   desk-db:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:0.8.6-pg16-bookworm
     environment:
       POSTGRES_USER: desk
       POSTGRES_PASSWORD: desk

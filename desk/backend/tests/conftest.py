@@ -24,6 +24,9 @@ os.environ["DESK_ENVIRONMENT"] = "test"
 os.environ["DESK_FEED_INTERVAL_MINUTES"] = "0"
 os.environ["DESK_TIMEZONE"] = "UTC"
 os.environ.pop("DESK_ANTHROPIC_API_KEY", None)
+# Meaning search is tested with a fake embedder (tests/test_semantic.py); off everywhere else.
+os.environ["DESK_SEMANTIC"] = "false"
+os.environ["DESK_EMBED_INTERVAL_MINUTES"] = "0"
 
 from sqlalchemy import text  # noqa: E402
 

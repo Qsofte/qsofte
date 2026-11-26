@@ -16,3 +16,4 @@ dist-ssr/
 __pycache__/
 .pytest_cache/
 desk/backend/static/
+desk/backend/models/

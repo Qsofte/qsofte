@@ -14,3 +14,5 @@ httpx==0.28.1        # feed fetching
 defusedxml==0.7.1    # safe RSS/Atom parsing
 tzdata==2026.6       # time zones in the slim image
 anthropic==2.14.0    # Ask: answers from Desk content (optional; needs DESK_ANTHROPIC_API_KEY)
+fastembed==0.9.1     # meaning-based search: small open-source embedding model, CPU (ONNX)
+pgvector==0.5.1      # SQLAlchemy type for pgvector columns

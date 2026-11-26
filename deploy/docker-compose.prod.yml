@@ -54,9 +54,11 @@ services:
         condition: service_healthy
     # No published port: only nginx, on the same network, reaches it.
 
+  # Postgres 16 with pgvector (meaning-based search). Debian-based: migration 0004 rebuilds text
+  # indexes, as sort order differs from the Alpine image the Desk used before.
   desk-db:
     profiles: [desk]
-    image: postgres:16-alpine
+    image: pgvector/pgvector:0.8.6-pg16-bookworm
     restart: always
     logging: *logging
     env_file: ${SHARED_DIR:-/opt/qsofte/shared}/desk/desk.env
@@ -74,7 +76,7 @@ services:
   # A compressed dump every 24h, kept 14 days, in SHARED_DIR/desk/backups.
   desk-backup:
     profiles: [desk]
-    image: postgres:16-alpine
+    image: pgvector/pgvector:0.8.6-pg16-bookworm
     restart: always
     logging: *logging
     env_file: ${SHARED_DIR:-/opt/qsofte/shared}/desk/desk.env

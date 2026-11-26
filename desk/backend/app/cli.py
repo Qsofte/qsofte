@@ -5,6 +5,7 @@
   python -m app.cli add-user EMAIL NAME    add a person (password read from stdin, never argv)
   python -m app.cli set-password EMAIL     reset a password (from stdin); signs them out everywhere
   python -m app.cli disable-user EMAIL     stop a person signing in
+  python -m app.cli reindex                embed new and changed content for meaning-based search now
 """
 
 import asyncio
@@ -82,12 +83,23 @@ async def disable_user(email: str) -> None:
     print(f"{email} can no longer sign in.")
 
 
+async def reindex() -> None:
+    from .semantic import get_embedder, reindex as run
+
+    embedder = get_embedder()
+    if embedder is None:
+        sys.exit("Meaning-based search is off (DESK_SEMANTIC=false) or its model could not load; see the log.")
+    async with sessionmaker()() as db:
+        print(f"desk: meaning index {await run(db, embedder)}")
+
+
 def main(argv: list[str]) -> None:
     commands = {
         "bootstrap": (bootstrap, 0),
         "add-user": (add_user, 2),
         "set-password": (set_password, 1),
         "disable-user": (disable_user, 1),
+        "reindex": (reindex, 0),
     }
     if not argv or argv[0] not in commands or len(argv) - 1 != commands[argv[0]][1]:
         sys.exit(__doc__)

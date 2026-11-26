@@ -90,6 +90,9 @@ export const feedKinds = { regulator: 'Regulators', industry: 'Industry', news: 
 export type FeedKind = keyof typeof feedKinds;
 export type FeedItemState = 'new' | 'starred' | 'dismissed' | 'noted';
 
+// Shown only where it helps: a result that shares no words with the search, or a near-spelling.
+export const hitMatch = { meaning: 'Related in meaning', close: 'Close spelling' } as const;
+
 export const hitKinds = {
   domain: 'Domain position',
   initiative: 'Landscape',
