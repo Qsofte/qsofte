@@ -16,7 +16,8 @@ before it is pushed. A hook runs the design guard after every edit under `src/`.
 A separate private app at payments.desk.qsofte.com (FastAPI + Postgres + React 19). Read
 `desk/README.md`. The public site's rules on design apply to it too. Its data lives only in
 the server's Postgres: this repo is public, so never commit notes, positions or accounts.
-Checks: `cd desk/backend && python -m pytest -q` and `cd desk/frontend && npm run check`.
+Checks: `cd desk/backend && python -m pytest -q` (needs Postgres: the dev compose one, or
+`DESK_TEST_DATABASE_URL`) and `cd desk/frontend && npm run check`.
 
 ## Commands
 

@@ -16,8 +16,8 @@ router = APIRouter(tags=["search"])
 async def search_desk(
     q: str = Query(min_length=1, max_length=200), _: User = Depends(current_user), db: AsyncSession = Depends(get_db)
 ) -> SearchOut:
-    terms, docs = await search(db, q)
-    return SearchOut(q=q, terms=terms, hits=[d.hit(terms) for d in docs])
+    r = await search(db, q)
+    return SearchOut(q=q, terms=r.query.terms, hits=[d.hit() for d in r.docs], fuzzy=r.fuzzy, corrected=r.corrected)
 
 
 @router.get("/ask", response_model=AskStatus)
@@ -34,8 +34,8 @@ async def ask(body: AskIn, user: User = Depends(current_user), db: AsyncSession 
     if not asker.enabled():
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE,
                             "Ask is not set up: add the DESK_ANTHROPIC_API_KEY secret and deploy. Search still works.")
-    terms, docs = await search(db, body.question, limit=asker.MAX_SOURCES)
-    sources = [d.hit(terms) for d in docs]
+    docs = (await search(db, body.question, limit=asker.MAX_SOURCES)).docs
+    sources = [d.hit() for d in docs]
     if not docs:
         return AskOut(question=body.question, answer=NOTHING, sources=[], model="")
     asker.limiter.check(user.id, get_settings().ask_per_hour)

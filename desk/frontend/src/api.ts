@@ -331,7 +331,8 @@ export const api = {
   feedItem: (id: number) => request<FeedItem>('GET', `/feed-items/${id}`),
   setFeedItemState: (id: number, state: FeedItemState) => request<FeedItem>('PATCH', `/feed-items/${id}`, { state }),
 
-  search: (query: string) => request<{ q: string; terms: string[]; hits: SearchHit[] }>('GET', `/search${q({ q: query })}`),
+  search: (query: string) =>
+    request<{ q: string; terms: string[]; hits: SearchHit[]; fuzzy: boolean; corrected: string | null }>('GET', `/search${q({ q: query })}`),
   askStatus: () => request<{ enabled: boolean }>('GET', '/ask'),
   ask: (question: string) => request<Answer>('POST', '/ask', { question }),
 

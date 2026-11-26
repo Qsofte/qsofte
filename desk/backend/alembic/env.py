@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from logging.config import fileConfig
 
 from alembic import context
@@ -9,6 +10,9 @@ from app.config import get_settings
 from app.db import Base
 
 config = context.config
+# Alembic cannot compare generated (computed) column expressions; tests/test_migrations.py checks
+# that 0003's search expressions equal the models' instead.
+warnings.filterwarnings("ignore", message="Computed default on .* cannot be modified")
 if config.config_file_name:
     fileConfig(config.config_file_name)
 target_metadata = Base.metadata

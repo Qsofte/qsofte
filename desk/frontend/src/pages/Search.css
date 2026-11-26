@@ -72,6 +72,22 @@
   text-decoration: underline;
 }
 
+.search__note {
+  color: var(--ink-2);
+}
+
+.search__note strong {
+  color: var(--ink);
+}
+
+.search__snippet mark {
+  padding: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  color: var(--ink);
+  font-weight: var(--weight-semibold);
+}
+
 .search__snippet {
   color: var(--ink-2);
   font-size: var(--text-sm);

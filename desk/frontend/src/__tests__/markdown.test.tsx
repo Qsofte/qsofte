@@ -36,3 +36,12 @@ describe('ask answers', () => {
     expect(hrefs).toEqual(['#source-1', '#source-3', 'https://bis.org']);
   });
 });
+
+describe('search snippets', () => {
+  it('marks the words the server highlighted, and nothing else', async () => {
+    const { Highlighted } = await import('../pages/Search');
+    const { container } = render(<Highlighted text={'Banks pre-fund the \u0002settlement\u0003 account <b>x</b>'} />);
+    expect([...container.querySelectorAll('mark')].map((m) => m.textContent)).toEqual(['settlement']);
+    expect(container.querySelector('b')).toBeNull();
+  });
+});

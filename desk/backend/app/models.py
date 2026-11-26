@@ -2,10 +2,41 @@
 
 from datetime import date, datetime, timezone
 
-from sqlalchemy import JSON, Column, Date, DateTime, ForeignKey, Integer, String, Table, Text, UniqueConstraint
+from sqlalchemy import JSON, Column, Computed, Date, DateTime, ForeignKey, Index, Integer, String, Table, Text, UniqueConstraint
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .db import Base
+
+# Full-text search: each searchable table carries a stored tsvector that Postgres keeps in step
+# with the row, indexed with GIN. 'desk' is a text search configuration (migration 0003): English
+# stemming with accents removed. Weights rank title (A) over summary (B) over body (C).
+SEARCH_CONFIG = "desk"
+SEARCH_WEIGHTS = {
+    "domains": {"A": ["name"], "B": ["summary", "position"], "C": ["open_questions", "capability_evidence"]},
+    "initiatives": {"A": ["name", "aliases"], "B": ["summary", "lead"], "C": ["participants"]},
+    "notes": {"A": ["title"], "B": ["so_what"], "C": ["body"]},
+    "guides": {"A": ["title"], "B": ["summary"], "C": ["body"]},
+    "events": {"A": ["name"], "B": ["why", "goal"], "C": ["organiser", "city"]},
+    "feed_items": {"A": ["title"], "C": ["summary"]},
+}
+
+
+def search_expression(table: str) -> str:
+    parts = []
+    for weight, columns in SEARCH_WEIGHTS[table].items():
+        # || and coalesce, not concat_ws: a generated column only accepts immutable functions.
+        text = " || ' ' || ".join(f"coalesce({c}, '')" for c in columns)
+        parts.append(f"setweight(to_tsvector('{SEARCH_CONFIG}', {text}), '{weight}')")
+    return " || ".join(parts)
+
+
+def search_column(table: str):
+    return mapped_column(TSVECTOR, Computed(search_expression(table), persisted=True), deferred=True)
+
+
+def search_index(table: str) -> Index:
+    return Index(f"ix_{table}_search", "search_vector", postgresql_using="gin")
 
 
 def utcnow() -> datetime:
@@ -30,6 +61,8 @@ class Domain(Base):
     """One of the six watch areas. Holds our current position and capability level."""
 
     __tablename__ = "domains"
+    __table_args__ = (search_index("domains"),)
+    search_vector: Mapped[str | None] = search_column("domains")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(String(60), unique=True)
@@ -51,6 +84,8 @@ class Initiative(Base):
     """A named programme, rail, scheme or rulebook: Nexus, Agorá, UPI, SGQR, MiCA ..."""
 
     __tablename__ = "initiatives"
+    __table_args__ = (search_index("initiatives"),)
+    search_vector: Mapped[str | None] = search_column("initiatives")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(String(60), unique=True)
@@ -84,6 +119,8 @@ class Note(Base):
     """A journal entry: signal, brief, thesis, meeting or debrief. Always carries a 'so what'."""
 
     __tablename__ = "notes"
+    __table_args__ = (search_index("notes"),)
+    search_vector: Mapped[str | None] = search_column("notes")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     type: Mapped[str] = mapped_column(String(20), index=True)
@@ -112,6 +149,8 @@ class Event(Base):
     """A conference or forum and how Qsofte shows up at it."""
 
     __tablename__ = "events"
+    __table_args__ = (search_index("events"),)
+    search_vector: Mapped[str | None] = search_column("events")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(160))
@@ -133,6 +172,8 @@ class Guide(Base):
     """Education material: a primer or deep dive, written in Markdown."""
 
     __tablename__ = "guides"
+    __table_args__ = (search_index("guides"),)
+    search_vector: Mapped[str | None] = search_column("guides")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(String(80), unique=True)
@@ -172,7 +213,8 @@ class FeedItem(Base):
     """One article from a feed, tagged to domains and initiatives by keyword."""
 
     __tablename__ = "feed_items"
-    __table_args__ = (UniqueConstraint("feed_id", "guid"),)
+    __table_args__ = (UniqueConstraint("feed_id", "guid"), search_index("feed_items"))
+    search_vector: Mapped[str | None] = search_column("feed_items")
 
     id: Mapped[int] = mapped_column(primary_key=True)
     feed_id: Mapped[int] = mapped_column(ForeignKey("feeds.id", ondelete="CASCADE"), index=True)

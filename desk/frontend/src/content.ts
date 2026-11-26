@@ -274,6 +274,8 @@ export const copy = {
     sources: 'Sources',
     results: (n: number) => `${n} result${n === 1 ? '' : 's'}`,
     none: 'Nothing matches. Try fewer or different words.',
+    corrected: 'No exact matches for some words. Showing results for',
+    fuzzy: 'Few exact matches, so close title matches are included.',
     from: (model: string) => `Answered by ${model} from the sources below. Check them before quoting.`,
   },
   landscape: {

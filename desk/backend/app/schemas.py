@@ -448,6 +448,10 @@ class SearchOut(BaseModel):
     q: str
     terms: list[str]
     hits: list[SearchHit]
+    # True when typo-tolerant title matches were added because exact matches were few.
+    fuzzy: bool = False
+    # The words actually searched, when misspelt ones were corrected ("remittance corridors").
+    corrected: str | None = None
 
 
 class AskIn(BaseModel):

@@ -122,7 +122,7 @@ STOPWORDS = set(
     "a an and are as at be been but by can could did do does for from had has have how i if in into is it its "
     "me my of on or our should so than that the their them then there these they this to us was we were what "
     "when where which who why will with would you your about any all also between more most much tell know "
-    "latest new news give show explain summarise summarize qsofte desk please vs versus".split()
+    "latest new news give show explain summarise summarize qsofte desk please vs versus doing done happening going get got make made say said think".split()
 )
 
 
@@ -137,19 +137,77 @@ def query_terms(q: str, limit: int = 8) -> list[str]:
     return out[:limit]
 
 
-def score(terms: list[str], title: str, body: str) -> float:
-    """Title hits count three times a body hit; matching every term earns a bonus."""
-    if not terms:
-        return 0.0
-    t, b = fold(title or ""), fold(body or "")
-    total, matched = 0.0, 0
-    for term in terms:
-        in_title = term in t
-        hits = min(b.count(term), 3)
-        if in_title or hits:
-            matched += 1
-        total += (3.0 if in_title else 0.0) + hits
-    if matched == 0:
-        return 0.0
-    coverage = matched / len(terms)
-    return total * (0.5 + coverage) * (1.5 if matched == len(terms) else 1.0)
+# Acronyms and their spelled-out forms, both ways. Payments vocabulary only; initiative aliases
+# (edited in the app) are added on top at query time.
+ACRONYMS: dict[str, list[str]] = {
+    "cbdc": ["central bank digital currency"],
+    "wcbdc": ["wholesale cbdc", "wholesale central bank digital currency"],
+    "rtp": ["real-time payment", "instant payment"],
+    "a2a": ["account-to-account"],
+    "vop": ["verification of payee"],
+    "cop": ["confirmation of payee"],
+    "aml": ["anti-money laundering"],
+    "ctf": ["counter-terrorism financing"],
+    "kyc": ["know your customer"],
+    "fx": ["foreign exchange"],
+    "dlt": ["distributed ledger"],
+    "defi": ["decentralised finance"],
+    "rwa": ["real-world asset"],
+    "mmf": ["money market fund"],
+    "bnpl": ["buy now pay later"],
+    "psp": ["payment service provider"],
+    "pis": ["payment initiation"],
+    "cdr": ["consumer data right"],
+    "npp": ["new payments platform"],
+    "upi": ["unified payments interface"],
+    "fps": ["faster payments"],
+    "iso20022": ["iso 20022"],
+    "g20": ["g20 roadmap"],
+}
+_SPELLED = {fold(p): a for a, phrases in ACRONYMS.items() for p in phrases}
+
+
+def spelling_variants(word: str) -> list[str]:
+    """British and US forms the English stemmer keeps apart: tokenised <-> tokenized."""
+    out = []
+    for a, b in (("is", "iz"), ("iz", "is")):
+        m = re.match(rf"^(.{{3,}}){a}(e|ed|es|er|ers|ing|ation|ations)$", word)
+        if m:
+            out.append(f"{m.group(1)}{b}{m.group(2)}")
+    for a, b in (("our", "or"), ("or", "our")):
+        if word.endswith(a) and len(word) > len(a) + 2 and word not in ("four", "your", "tour", "hour"):
+            out.append(word[: -len(a)] + b)
+    return out
+
+
+@dataclass
+class Query:
+    """A search, expanded. Each group lists interchangeable forms of one thing the person typed;
+    a result should match a form from every group to rank highest. `extra` only adds recall."""
+
+    groups: list[list[str]]
+    extra: list[str] = field(default_factory=list)
+
+    @property
+    def terms(self) -> list[str]:
+        return [g[0] for g in self.groups]
+
+
+def expand(q: str, alias_groups: list[list[str]] | None = None) -> Query:
+    """Terms from the query, each with its spelling variants, acronym forms and initiative aliases.
+
+    alias_groups: for each initiative, its folded names and aliases ("nexus", "nexus global payments", "ngp").
+    """
+    folded = " ".join(fold(q).split())
+    groups = []
+    for term in query_terms(q):
+        forms = [term, *spelling_variants(term)]
+        forms += ACRONYMS.get(term.replace(" ", ""), [])
+        for names in alias_groups or []:
+            if term in names:
+                forms += [n for n in names if n != term]
+        groups.append(list(dict.fromkeys(forms)))
+    extra = [acronym for phrase, acronym in _SPELLED.items() if phrase in folded]
+    for names in alias_groups or []:
+        extra += [names[0] for n in names if " " in n and n in folded]
+    return Query(groups=groups, extra=list(dict.fromkeys(extra)))

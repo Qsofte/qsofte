@@ -1,4 +1,4 @@
-from app.rules import build_tagger, fold, query_terms, score, tag
+from app.rules import build_tagger, expand, fold, query_terms, spelling_variants, tag
 
 TAGGER = build_tagger([
     ("agora", "D1", "Project Agorá", "Agora, Agorá"),
@@ -37,10 +37,19 @@ def test_query_terms_drop_filler():
     assert query_terms("the and of") == []
 
 
-def test_score_prefers_title_and_full_matches():
-    title_hit = score(["nexus", "fx"], "Nexus FX quotes", "")
-    body_hit = score(["nexus", "fx"], "Something else", "nexus fx")
-    partial = score(["nexus", "fx"], "Nexus", "")
-    assert title_hit > body_hit > 0
-    assert title_hit > partial > 0
-    assert score(["nexus"], "Other", "nothing") == 0
+def test_spelling_variants_cover_british_and_us_forms():
+    assert spelling_variants("tokenised") == ["tokenized"]
+    assert spelling_variants("tokenization") == ["tokenisation"]
+    assert spelling_variants("labour") == ["labor"]
+    assert spelling_variants("settlement") == []
+    assert spelling_variants("your") == []
+
+
+def test_expand_adds_acronyms_both_ways_and_aliases():
+    aliases = [["nexus", "project nexus", "nexus global payments", "ngp"]]
+    q = expand("CBDC tokenised", aliases)
+    assert q.groups == [["cbdc", "central bank digital currency"], ["tokenised", "tokenized"]]
+    q = expand("What is NGP doing on central bank digital currency?", aliases)
+    assert q.groups[0] == ["ngp", "nexus", "project nexus", "nexus global payments"]
+    assert "cbdc" in q.extra
+    assert q.terms == ["ngp", "central", "bank", "digital", "currency"]

@@ -13,7 +13,7 @@ async def test_search_ranks_across_the_desk(client):
             "domain_slug": "tokenised-deposits"}
     await client.post("/api/notes", json=note, headers=WRITE)
     r = (await client.get("/api/search", params={"q": "tokenised deposits stablecoins"})).json()
-    assert r["terms"] == ["tokenised", "deposits", "stablecoins"]
+    assert r["terms"] == ["tokenised", "deposits", "stablecoins"] and r["corrected"] is None
     kinds = {h["kind"] for h in r["hits"]}
     assert {"note", "guide", "initiative"} <= kinds
     assert r["hits"][0]["title"] in ("Tokenised deposits beat stablecoins for banks",
@@ -100,5 +100,5 @@ def test_ask_is_rate_limited_per_person():
 
 def test_snippets_are_plain_text():
     from app.search import snippet
-    out = snippet("## The idea\n\n- **Atomic** settlement via [Agorá](https://bis.org) and `code`", ["atomic"])
+    out = snippet("## The idea\n\n- **Atomic** settlement via [Agorá](https://bis.org) and `code`")
     assert out == "The idea Atomic settlement via Agorá and code"

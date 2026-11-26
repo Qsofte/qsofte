@@ -19,6 +19,17 @@ function HitTitle({ hit }: { hit: SearchHit }) {
   );
 }
 
+// The server marks matching words between \u0002 and \u0003.
+export function Highlighted({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(\u0002[^\u0003]*\u0003)/).map((part, i) =>
+        part.startsWith('\u0002') ? <mark key={i}>{part.slice(1, -1)}</mark> : part,
+      )}
+    </>
+  );
+}
+
 function Hits({ hits, numbered = false }: { hits: SearchHit[]; numbered?: boolean }) {
   return (
     <ol className={`search__hits${numbered ? ' search__hits--numbered' : ''}`}>
@@ -30,7 +41,9 @@ function Hits({ hits, numbered = false }: { hits: SearchHit[]; numbered?: boolea
             {h.date && <span className="mono">{day(h.date)}</span>}
           </div>
           <HitTitle hit={h} />
-          <p className="search__snippet">{h.snippet}</p>
+          <p className="search__snippet">
+            <Highlighted text={h.snippet} />
+          </p>
         </li>
       ))}
     </ol>
@@ -125,6 +138,12 @@ export default function Search() {
       {results.error && <p className="error">{results.error}</p>}
       {results.data && !answer && (
         <section className="block" aria-label={t.results(results.data.hits.length)}>
+          {results.data.corrected && (
+            <p className="search__note">
+              {t.corrected} <strong>{results.data.corrected}</strong>
+            </p>
+          )}
+          {results.data.fuzzy && <p className="search__note">{t.fuzzy}</p>}
           <p className="mono">{t.results(results.data.hits.length)}</p>
           {results.data.hits.length ? <Hits hits={results.data.hits} /> : <p className="empty">{t.none}</p>}
         </section>

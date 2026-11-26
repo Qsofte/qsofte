@@ -51,6 +51,26 @@ Add a source on the Feeds page with its RSS or Atom address. Mark busy general s
 (Finextra, Swift, MAS, IMF and NPCI did in November 2026) show the reason on the page.
 The reader refuses private addresses and oversized responses, and parses XML with defusedxml.
 
+## Search
+
+Postgres full-text search, with no extra service to run:
+
+- Each searchable table (domains, initiatives, notes, guides, events, feed items) has a stored
+  `search_vector` that Postgres keeps up to date itself, with a GIN index (migration 0003).
+  Weights rank titles over summaries over body text (`SEARCH_WEIGHTS` in `app/models.py`).
+- The `desk` text search configuration is English stemming with accents removed (`unaccent`),
+  so "settlements" finds "settling" and "agora" finds "Agorá".
+- Before searching, `rules.expand` adds British/US spellings (tokenised/tokenized), payments
+  acronyms both ways (`ACRONYMS`: CBDC, A2A, VoP, NPP…) and each initiative's *also known as* words.
+- Results rank with `ts_rank_cd`, doubled when every word matches; snippets come from
+  `ts_headline` with the matching words marked.
+- A word that matches nothing is corrected against the Desk's own words with `pg_trgm`
+  ("remitance" → "remittance") and the page says so; if matches are still few, close titles are
+  added.
+
+Later, for meaning-based search: add `pgvector` (swap the image to `pgvector/pgvector:pg16`),
+store an embedding per row from a small open-source model, and merge its ranking with this one.
+
 ## Ask
 
 Ask searches the Desk for the question, sends the best 12 matches to Claude
@@ -118,10 +138,12 @@ uvicorn app.main:app --reload --port 8000                      # API docs at /ap
 cd ../frontend && npm install && npm run dev                   # http://localhost:5174
 ```
 
-Checks (CI runs all of these):
+Checks (CI runs all of these). Backend tests need Postgres, because search uses its full-text
+search: they rebuild the `desk_test` database on the dev Postgres (:5433) each run, or the one
+named in `DESK_TEST_DATABASE_URL`.
 
 ```bash
-cd desk/backend && python -m pytest -q                         # API, auth, rules, migrations
+cd desk/backend && python -m pytest -q                         # API, auth, rules, search, migrations
 cd desk/frontend && npm run check                              # types, tests, design guard, build
 ```
 
