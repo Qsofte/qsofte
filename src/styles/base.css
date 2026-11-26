@@ -60,6 +60,17 @@ p {
   }
 }
 
+/* Present for screen readers and search engines, hidden on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -96,12 +107,14 @@ p {
 }
 
 .display {
+  font-weight: var(--weight-semibold);
   font-size: var(--text-display);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
 }
 
 .headline {
+  font-weight: var(--weight-semibold);
   font-size: var(--text-2xl);
   letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);

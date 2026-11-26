@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { notFound } from '../content';
-import { usePageTitle } from '../usePageTitle';
+import { usePageMeta } from '../usePageMeta';
 import './NotFound.css';
 
 export default function NotFound() {
-  usePageTitle('Page not found');
+  usePageMeta('/404');
   return (
     <section className="not-found">
       <div className="container">

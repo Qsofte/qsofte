@@ -2,62 +2,100 @@ import { Link } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import Clients from '../components/Clients';
 import Icon from '../components/Icon';
-import { aiPrinciples, arms, domains, hero, home, values, work } from '../content';
-import { usePageTitle } from '../usePageTitle';
+import ProductMark from '../components/ProductMark';
+import StatusTag from '../components/StatusTag';
+import { aiPrinciples, arms, capabilities, hero, home, products } from '../content';
+import { usePageMeta } from '../usePageMeta';
 import './Home.css';
 
 export default function Home() {
-  usePageTitle();
-  const [key, ...specialities] = domains;
+  usePageMeta('/');
   return (
     <div className="home">
       <section className="home__hero">
         <div className="container">
-          <span className="eyebrow">{hero.eyebrow}</span>
-          <h1 className="display">{hero.title}</h1>
-          <p className="lead">{hero.lead}</p>
-          <div className="home__actions">
-            <Link to="/contact" className="btn btn--secondary">
-              {hero.primary}
-            </Link>
-            <a href="#how-we-build" className="link-more">
-              {hero.secondary}
-            </a>
+          <h1 className="visually-hidden">{hero.title}</h1>
+          <div className="home__split">
+            {arms.map((a) => (
+              <div key={a.to} className="home__half">
+                <span className="eyebrow">{a.eyebrow}</span>
+                <p className="display" aria-hidden="true">
+                  {a.title}
+                </p>
+                <p className="home__tagline">{a.tagline}</p>
+                <Link to={a.to} className="link-more">
+                  {a.action}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <Clients />
 
-      <section className="section" aria-labelledby="arms-heading">
+      <section className="section" aria-labelledby="products-heading">
         <div className="container">
           <header className="home__head">
-            <span className="eyebrow">{home.armsEyebrow}</span>
-            <h2 id="arms-heading" className="headline">
-              {home.armsTitle}
+            <span className="eyebrow">{home.productsEyebrow}</span>
+            <h2 id="products-heading" className="headline">
+              {home.productsTitle}
             </h2>
           </header>
-          <div className="home__arms">
-            {arms.map((a) => (
-              <Link key={a.to} to={a.to} className="home__arm">
-                <span className="eyebrow">{a.eyebrow}</span>
-                <h3>{a.title}</h3>
-                <p>{a.text}</p>
-                <span className="link-more">{a.action}</span>
-              </Link>
+          <div className="home__products">
+            {products.map((p) => (
+              <article key={p.slug} className="home__product">
+                <div className="home__product-top">
+                  <h3>
+                    <ProductMark name={p.name} logo={p.logo} />
+                  </h3>
+                  <StatusTag status={p.status} />
+                </div>
+                <span className="eyebrow">{p.sector}</span>
+                <p className="home__product-tagline">{p.tagline}</p>
+                <p>{p.problem}</p>
+                <Link to={p.to} className="link-more">
+                  {p.action}
+                </Link>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="how-we-build" className="section home__ai" aria-labelledby="ai-heading">
+      <section className="section home__engineering" aria-labelledby="engineering-heading">
         <div className="container">
           <header className="home__head">
-            <span className="eyebrow">{home.aiEyebrow}</span>
-            <h2 id="ai-heading" className="headline">
-              {home.aiTitle}
+            <span className="eyebrow">{home.engineeringEyebrow}</span>
+            <h2 id="engineering-heading" className="headline">
+              {home.engineeringTitle}
             </h2>
-            <p className="lead">{home.aiLead}</p>
+          </header>
+          <ul className="home__capabilities">
+            {capabilities.map((c) => (
+              <li key={c.slug}>
+                <Icon name={c.icon} />
+                <div>
+                  <h3>{c.title}</h3>
+                  <p>{c.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Link to="/engineering" className="link-more">
+            {home.engineeringMore}
+          </Link>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="approach-heading">
+        <div className="container">
+          <header className="home__head">
+            <span className="eyebrow">{home.approachEyebrow}</span>
+            <h2 id="approach-heading" className="headline">
+              {home.approachTitle}
+            </h2>
+            <p className="lead">{home.approachLead}</p>
           </header>
           <ol className="home__principles">
             {aiPrinciples.map((p) => (
@@ -67,93 +105,9 @@ export default function Home() {
               </li>
             ))}
           </ol>
-          <Link to="/srovi" className="home__example">
-            <Icon name="spark" size={32} />
-            <div>
-              <span className="eyebrow">{home.aiExampleLabel}</span>
-              <h3>{home.aiExampleTitle}</h3>
-              <p>{home.aiExampleText}</p>
-              <span className="link-more">{home.aiExampleAction}</span>
-            </div>
+          <Link to="/about" className="link-more">
+            {home.approachMore}
           </Link>
-        </div>
-      </section>
-
-      <section className="section home__domains" aria-labelledby="domains-heading">
-        <div className="container">
-          <header className="home__head">
-            <span className="eyebrow">{home.domainsEyebrow}</span>
-            <h2 id="domains-heading" className="headline">
-              {home.domainsTitle}
-            </h2>
-          </header>
-          <Link to={`/industries#${key.slug}`} className="home__key">
-            <Icon name={key.icon} size={36} />
-            <div>
-              <h3>{key.title}</h3>
-              <p>{key.summary}</p>
-            </div>
-          </Link>
-          <ul className="home__specialities">
-            {specialities.map((d) => (
-              <li key={d.slug}>
-                <Link to={`/industries#${d.slug}`}>
-                  <Icon name={d.icon} />
-                  <span>{d.title}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <Link to="/industries" className="link-more">
-            {home.domainsMore}
-          </Link>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="work-heading">
-        <div className="container">
-          <header className="home__head">
-            <span className="eyebrow">{home.workEyebrow}</span>
-            <h2 id="work-heading" className="headline">
-              {home.workTitle}
-            </h2>
-          </header>
-          <div className="home__work">
-            {work.map((w) => (
-              <article key={w.client} className="home__case">
-                <span className="eyebrow">{w.client}</span>
-                <h3>{w.title}</h3>
-                <p>{w.text}</p>
-                <ul>
-                  {w.points.map((p) => (
-                    <li key={p}>{p}</li>
-                  ))}
-                </ul>
-                <Link to={w.to} className="link-more">
-                  {w.action}
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section home__values" aria-labelledby="values-heading">
-        <div className="container">
-          <header className="home__head">
-            <span className="eyebrow">{home.valuesEyebrow}</span>
-            <h2 id="values-heading" className="headline">
-              {home.valuesTitle}
-            </h2>
-          </header>
-          <div className="home__columns">
-            {values.map((v) => (
-              <div key={v.title}>
-                <h3>{v.title}</h3>
-                <p>{v.text}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

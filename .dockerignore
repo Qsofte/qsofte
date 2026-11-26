@@ -7,4 +7,5 @@ deploy
 e2e
 test-results
 playwright-report
+dist-ssr
 desk

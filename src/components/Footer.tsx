@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { company, domains, footer, nav, services } from '../content';
+import { company, footer, nav, products } from '../content';
 import './Footer.css';
 
 export default function Footer() {
@@ -17,21 +17,11 @@ export default function Footer() {
             </p>
           </div>
           <div>
-            <h2>{footer.servicesHeading}</h2>
+            <h2>{footer.productsHeading}</h2>
             <ul>
-              {services.map((s) => (
-                <li key={s.slug}>
-                  <Link to={`/services#${s.slug}`}>{s.title}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2>{footer.industriesHeading}</h2>
-            <ul>
-              {domains.map((d) => (
-                <li key={d.slug}>
-                  <Link to={`/industries#${d.slug}`}>{d.title}</Link>
+              {products.map((p) => (
+                <li key={p.slug}>
+                  <Link to={p.to}>{p.name}</Link>
                 </li>
               ))}
             </ul>
@@ -39,11 +29,16 @@ export default function Footer() {
           <div>
             <h2>{footer.companyHeading}</h2>
             <ul>
-              {nav.map((item) => (
-                <li key={item.to}>
-                  <Link to={item.to}>{item.label}</Link>
-                </li>
-              ))}
+              {nav
+                .filter((item) => item.to !== '/products')
+                .map((item) => (
+                  <li key={item.to}>
+                    <Link to={item.to}>{item.label}</Link>
+                  </li>
+                ))}
+              <li>
+                <Link to="/privacy">{footer.privacy}</Link>
+              </li>
             </ul>
           </div>
         </div>

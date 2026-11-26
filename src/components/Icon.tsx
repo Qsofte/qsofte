@@ -107,6 +107,23 @@ const paths: Record<IconName, JSX.Element> = {
       <path d="M2.5 13.5l3 3M21.5 13.5l-3 3M9 17.5l1.5 1.5M12 16.5l1.5 1.5" />
     </>
   ),
+  // Samewe: a home within a community
+  home: (
+    <>
+      <path d="M3.5 11L12 4l8.5 7" />
+      <path d="M5.5 9.5V20h13V9.5" />
+      <path d="M10 20v-5h4v5" />
+    </>
+  ),
+  // Agentic contact centre: a headset
+  headset: (
+    <>
+      <path d="M4.5 14v-2a7.5 7.5 0 0115 0v2" />
+      <rect x="3" y="13" width="4" height="6" rx="1.5" />
+      <rect x="17" y="13" width="4" height="6" rx="1.5" />
+      <path d="M19 19v.5a2.5 2.5 0 01-2.5 2.5H13" />
+    </>
+  ),
   // AI-native: a spark
   spark: (
     <>
