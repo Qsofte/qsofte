@@ -5,7 +5,7 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db import get_db
-from ..models import Domain, Event, Initiative, Note, User, note_initiatives
+from ..models import Domain, Event, FeedItem, Initiative, Note, User, note_initiatives
 from ..schemas import NoteIn, NoteOut
 from ..security import current_user
 from ..vocab import NoteType, Region
@@ -86,9 +86,17 @@ async def _apply(db: AsyncSession, n: Note, body: NoteIn) -> None:
 
 @router.post("", response_model=NoteOut, status_code=201)
 async def create_note(body: NoteIn, user: User = Depends(current_user), db: AsyncSession = Depends(get_db)) -> NoteOut:
+    item = None
+    if body.from_feed_item_id is not None:
+        item = await db.get(FeedItem, body.from_feed_item_id)
+        if item is None:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "The article this note came from is gone.")
     n = Note(created_by_id=user.id, initiatives=[])
     await _apply(db, n, body)
     db.add(n)
+    await db.flush()
+    if item is not None:
+        item.note_id, item.state = n.id, "noted"
     await db.commit()
     return NoteOut.of(await _get(db, n.id))
 

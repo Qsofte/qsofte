@@ -1,0 +1,11 @@
+.guide-edit__body {
+  font-family: var(--mono);
+  font-size: var(--text-base);
+}
+
+.guide-edit__preview {
+  min-height: calc(var(--tap) * 6);
+  padding: var(--space-5);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+}

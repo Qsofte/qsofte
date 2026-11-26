@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..config import local_today
 from ..db import get_db
 from ..models import Domain, Note, User, utcnow
 from ..rules import in_window, position_due, week_label
@@ -20,7 +21,7 @@ EVENT_DAYS = 90
 
 @router.get("/today", response_model=TodayOut)
 async def today(_: User = Depends(current_user), db: AsyncSession = Depends(get_db)) -> TodayOut:
-    today = date.today()
+    today = local_today()
     now = utcnow()
     recent = (
         await db.scalars(

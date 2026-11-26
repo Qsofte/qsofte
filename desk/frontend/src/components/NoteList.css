@@ -22,6 +22,9 @@
 }
 
 .note-list__title {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
   font-size: var(--text-lg);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-snug);

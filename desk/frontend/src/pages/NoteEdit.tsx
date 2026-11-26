@@ -10,6 +10,7 @@ import './NoteEdit.css';
 function blank(params: URLSearchParams): NoteInput {
   const type = params.get('type');
   const event = params.get('event');
+  const initiative = params.get('initiative');
   return {
     type: type && type in noteTypes ? (type as NoteType) : 'signal',
     title: '',
@@ -21,11 +22,20 @@ function blank(params: URLSearchParams): NoteInput {
     regions: [],
     horizon: '12m',
     stance: 'watch',
-    initiative_slugs: [],
+    initiative_slugs: initiative ? [initiative] : [],
     event_id: event ? Number(event) : null,
     review_on: null,
   };
 }
+
+const DOMAIN_BY_CODE: Record<string, string> = {
+  D1: 'cross-border',
+  D2: 'real-time-rails',
+  D3: 'digital-assets',
+  D4: 'tokenised-deposits',
+  D5: 'regulation',
+  D6: 'innovation',
+};
 
 export default function NoteEdit() {
   const { id } = useParams();
@@ -41,6 +51,27 @@ export default function NoteEdit() {
   const events = useLoad(api.events, []).data ?? [];
   const t = copy.note;
   usePageTitle(editing ? t.editTitle : t.newTitle);
+
+  // Written from a feed article: start from its headline, link, date and tags.
+  const itemId = params.get('item');
+  useEffect(() => {
+    if (editing || !itemId) return;
+    api
+      .feedItem(Number(itemId))
+      .then((item) =>
+        setForm((f) => ({
+          ...f,
+          title: item.title.slice(0, 200),
+          body: item.summary,
+          source_url: item.link,
+          occurred_on: item.published_at.slice(0, 10),
+          domain_slug: f.domain_slug || DOMAIN_BY_CODE[item.domain_codes[0]] || '',
+          initiative_slugs: item.initiative_slugs,
+          from_feed_item_id: item.id,
+        })),
+      )
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : String(e)));
+  }, [editing, itemId]);
 
   useEffect(() => {
     if (!editing) return;

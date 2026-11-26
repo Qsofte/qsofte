@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://purl.org/rss/1.0/">
+<channel rdf:about="https://example.org/rss"><title>RBA</title></channel>
+<item rdf:about="https://example.org/mr-1"><title>Statement on the New Payments Platform</title>
+<link>https://example.org/mr-1</link><description>PayTo and NPP update.</description><dc:date>2026-11-05T23:45:00Z</dc:date></item>
+</rdf:RDF>

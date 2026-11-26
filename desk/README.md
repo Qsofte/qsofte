@@ -1,9 +1,19 @@
 # Payments Desk
 
 A private, signed-in workspace at **https://payments.desk.qsofte.com** for Qsofte's payments
-strategy work: the six watch domains and our position on each, named initiatives (Nexus,
-Mandala, Agorá, Acacia …), a journal of notes that must each say "so what for Qsofte",
-an event plan for where we show up, and a capability map.
+strategy work:
+
+- **Today**: this week's notes, tagged news from the feeds, upcoming events, reviews due.
+- **Domains**: the six watch areas and our position on each.
+- **Landscape**: about 70 initiatives by kind (cross-border links, central bank projects,
+  payment rails, QR schemes, bank platforms, rules, standards, industry moves) and region,
+  each with its notes, guides and news.
+- **Library**: primers and deep dives in Markdown. Seeded guides are drafts until checked.
+- **Notes**: signals, briefs, theses, meetings and debriefs; each says "so what for Qsofte".
+- **Feeds**: RSS/Atom from regulators and the industry, tagged to domains and initiatives.
+- **Events** and **Capabilities**: where we show up, and where we stand.
+- **Search** (header, or press `/`) across all of it, and **Ask**: answers from Desk content
+  with Claude, citing its sources.
 
 Same stack as om, cut down to what this needs:
 
@@ -14,7 +24,8 @@ Same stack as om, cut down to what this needs:
 | Frontend | React 19, TypeScript, Vite 7, React Router 7, plain CSS with the qsofte.com tokens (`frontend/`) |
 | Runtime | One container: uvicorn serves `/api` and the built app. nginx in front does TLS. |
 
-Not carried over from om: Redis, Capacitor/PWA, maps, payment gateway, workers.
+Not carried over from om: Redis, Capacitor/PWA, maps, payment gateway, workers. Feeds refresh
+in a background task inside the one process.
 
 ## Privacy
 
@@ -28,6 +39,30 @@ SameSite=Strict cookie (12 h); writes need an `X-Desk-Request` header (blocks cr
 forms); sign-in is throttled in the app and by nginx; changing a password signs out every
 other device; strict CSP; no API docs in production.
 
+## Feeds
+
+The Desk reads its feeds every three hours (`DESK_FEED_INTERVAL_MINUTES`), and **Refresh now**
+on the Feeds page reads them on demand. Each article is tagged by keyword: domain terms in
+`app/rules.py` (`DOMAIN_TERMS`) and each initiative's name and *also known as* words (edit them
+on the initiative page). Articles older than 120 days are not stored.
+
+Add a source on the Feeds page with its RSS or Atom address. Mark busy general sources
+*only matching articles* so only tagged items are kept. Sources that block automated readers
+(Finextra, Swift, MAS, IMF and NPCI did in November 2026) show the reason on the page.
+The reader refuses private addresses and oversized responses, and parses XML with defusedxml.
+
+## Ask
+
+Ask searches the Desk for the question, sends the best 12 matches to Claude
+(`claude-opus-5-5`, set by `DESK_ASK_MODEL`) and shows the answer with numbered citations.
+It answers only from those sources and says when the Desk does not cover something. Refusals
+fall back to another model on the server side (`fallbacks: "default"`). Limited to 30 questions
+per person per hour (`DESK_ASK_PER_HOUR`).
+
+It is off until the `DESK_ANTHROPIC_API_KEY` GitHub secret is set and the Desk is deployed.
+**Privacy:** each question and the matching Desk content (notes, positions, guides) are sent
+to the Anthropic API. Leave the key unset if that is not acceptable; Search works without it.
+
 ## Going live (one-time)
 
 1. **DNS**: add an `A` record for `payments.desk.qsofte.com` pointing at the same server
@@ -39,6 +74,7 @@ other device; strict CSP; no API docs in production.
    - `DESK_ADMIN_EMAIL`: the first person's email
    - `DESK_ADMIN_PASSWORD`: their first password, 12+ characters. Change it in the app
      (Account) after first sign-in. It is only used while there are no accounts.
+   - `DESK_ANTHROPIC_API_KEY` (optional): an Anthropic API key, to turn on Ask.
 3. **Deploy** as usual (tag `v*` or run *Deploy to Production*). The workflow builds the
    desk image, writes `/opt/qsofte/shared/desk/desk.env` (root-only) from the secrets, starts
    `desk`, `desk-db` and `desk-backup`, and requests the certificate. Without the secrets the

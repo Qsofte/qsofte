@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..config import local_today
 from ..db import get_db
 from ..models import Event, Note, User
 from ..rules import next_occurrence
@@ -33,7 +34,7 @@ async def all_events(db: AsyncSession, today: date) -> list[EventOut]:
 
 @router.get("", response_model=list[EventOut])
 async def list_events(_: User = Depends(current_user), db: AsyncSession = Depends(get_db)) -> list[EventOut]:
-    return await all_events(db, date.today())
+    return await all_events(db, local_today())
 
 
 def _check(body: EventIn) -> None:
@@ -48,7 +49,7 @@ def _apply(e: Event, body: EventIn) -> None:
 
 async def _one(db: AsyncSession, e: Event) -> EventOut:
     counts = await debrief_counts(db)
-    return EventOut.of(e, next_occurrence(e.starts_on, e.typical_month, date.today()), counts.get(e.id, 0))
+    return EventOut.of(e, next_occurrence(e.starts_on, e.typical_month, local_today()), counts.get(e.id, 0))
 
 
 @router.post("", response_model=EventOut, status_code=201)

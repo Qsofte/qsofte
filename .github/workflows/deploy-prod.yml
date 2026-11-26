@@ -77,6 +77,7 @@ jobs:
           DESK_DB_PASSWORD: ${{ secrets.DESK_DB_PASSWORD }}
           DESK_ADMIN_EMAIL: ${{ secrets.DESK_ADMIN_EMAIL }}
           DESK_ADMIN_PASSWORD: ${{ secrets.DESK_ADMIN_PASSWORD }}
+          DESK_ANTHROPIC_API_KEY: ${{ secrets.DESK_ANTHROPIC_API_KEY }}
         run: |
           REL=/opt/qsofte/releases/${GITHUB_SHA}
           ssh_() { sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 "$TARGET" "$@"; }
@@ -92,6 +93,9 @@ jobs:
               echo "DESK_DATABASE_URL=postgresql+asyncpg://desk:$DESK_DB_PASSWORD@desk-db:5432/desk"
               echo "DESK_ADMIN_EMAIL=$DESK_ADMIN_EMAIL"
               echo "DESK_ADMIN_PASSWORD=$DESK_ADMIN_PASSWORD"
+              # Optional: turns on Ask (answers from Desk content with Claude).
+              [ -n "$DESK_ANTHROPIC_API_KEY" ] && echo "DESK_ANTHROPIC_API_KEY=$DESK_ANTHROPIC_API_KEY"
+              true
             } | ssh_ "$PRIV \$S mkdir -p /opt/qsofte/shared/desk && umask 077 && \$S tee /opt/qsofte/shared/desk/desk.env >/dev/null && \$S chmod 600 /opt/qsofte/shared/desk/desk.env"
           fi
           ssh_ "$PRIV \$S mkdir -p $REL && \$S chown \"\$(id -un)\" $REL"

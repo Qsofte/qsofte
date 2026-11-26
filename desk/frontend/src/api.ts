@@ -1,5 +1,19 @@
 // The one way the Desk talks to its server. Same origin, cookie session.
-import { copy, type EventStatus, type Horizon, type NoteType, type Region, type ShowUp, type Stance } from './content';
+import {
+  copy,
+  type EventStatus,
+  type FeedItemState,
+  type FeedKind,
+  type GuideLevel,
+  type GuideStatus,
+  type Horizon,
+  type InitiativeKind,
+  type InitiativeStatus,
+  type NoteType,
+  type Region,
+  type ShowUp,
+  type Stance,
+} from './content';
 
 export interface User {
   id: number;
@@ -17,8 +31,108 @@ export interface Initiative extends InitiativeRef {
   domain_code: string;
   domain_slug: string;
   summary: string;
-  status: string;
+  status: InitiativeStatus;
   url: string;
+  kind: InitiativeKind;
+  regions: Region[];
+  lead: string;
+  participants: string;
+  started: number | null;
+  aliases: string;
+}
+
+export interface InitiativeInput {
+  name: string;
+  domain_slug: string;
+  summary: string;
+  status: InitiativeStatus;
+  url: string;
+  kind: InitiativeKind;
+  regions: Region[];
+  lead: string;
+  participants: string;
+  started: number | null;
+  aliases: string;
+}
+
+export interface GuideRef {
+  slug: string;
+  title: string;
+  summary: string;
+  level: GuideLevel;
+  status: GuideStatus;
+}
+
+export interface InitiativeDetail extends Initiative {
+  domain_name: string;
+  notes: Note[];
+  guides: GuideRef[];
+  feed_items: FeedItem[];
+}
+
+export interface Guide extends GuideRef {
+  id: number;
+  body: string;
+  domain_slug: string | null;
+  domain_code: string | null;
+  initiative_slugs: string[];
+  updated_by: string;
+  updated_at: string;
+}
+
+export interface GuideInput {
+  title: string;
+  summary: string;
+  body: string;
+  level: GuideLevel;
+  status: GuideStatus;
+  domain_slug: string | null;
+  initiative_slugs: string[];
+}
+
+export interface Feed {
+  id: number;
+  name: string;
+  url: string;
+  kind: FeedKind;
+  active: boolean;
+  relevant_only: boolean;
+  last_fetched_at: string | null;
+  last_error: string;
+  item_count: number;
+}
+
+export type FeedInput = Pick<Feed, 'name' | 'url' | 'kind' | 'active' | 'relevant_only'>;
+
+export interface FeedItem {
+  id: number;
+  feed_id: number;
+  feed_name: string;
+  title: string;
+  link: string;
+  summary: string;
+  published_at: string;
+  domain_codes: string[];
+  initiative_slugs: string[];
+  state: FeedItemState;
+  note_id: number | null;
+}
+
+export interface SearchHit {
+  kind: 'note' | 'guide' | 'initiative' | 'domain' | 'event' | 'feed';
+  id: string;
+  title: string;
+  snippet: string;
+  href: string;
+  date: string | null;
+  score: number;
+}
+
+export interface Answer {
+  question: string;
+  answer: string;
+  sources: SearchHit[];
+  model: string;
 }
 
 export interface Note {
@@ -57,6 +171,7 @@ export interface NoteInput {
   initiative_slugs: string[];
   event_id: number | null;
   review_on: string | null;
+  from_feed_item_id?: number | null;
 }
 
 export interface Domain {
@@ -193,8 +308,32 @@ export const api = {
   updateDomain: (slug: string, patch: DomainPatch) => request<DomainDetail>('PATCH', `/domains/${slug}`, patch),
 
   initiatives: () => request<Initiative[]>('GET', '/initiatives'),
-  createInitiative: (body: { name: string; domain_slug: string; summary: string; status: string; url: string }) =>
+  initiative: (slug: string) => request<InitiativeDetail>('GET', `/initiatives/${slug}`),
+  createInitiative: (body: Partial<InitiativeInput> & { name: string; domain_slug: string }) =>
     request<Initiative>('POST', '/initiatives', body),
+  updateInitiative: (slug: string, body: Partial<InitiativeInput>) =>
+    request<Initiative>('PATCH', `/initiatives/${slug}`, body),
+
+  guides: () => request<Guide[]>('GET', '/guides'),
+  guide: (slug: string) => request<Guide>('GET', `/guides/${slug}`),
+  createGuide: (body: GuideInput) => request<Guide>('POST', '/guides', body),
+  updateGuide: (slug: string, body: GuideInput) => request<Guide>('PUT', `/guides/${slug}`, body),
+  deleteGuide: (slug: string) => request<void>('DELETE', `/guides/${slug}`),
+
+  feeds: () => request<Feed[]>('GET', '/feeds'),
+  addFeed: (body: FeedInput) => request<Feed>('POST', '/feeds', body),
+  updateFeed: (id: number, body: FeedInput) => request<Feed>('PUT', `/feeds/${id}`, body),
+  deleteFeed: (id: number) => request<void>('DELETE', `/feeds/${id}`),
+  refreshFeeds: (feedId?: number) =>
+    request<{ feeds: number; added: number; failed: number }>('POST', `/feeds/refresh${feedId ? `?feed_id=${feedId}` : ''}`),
+  feedItems: (filters: { state?: string; feed_id?: string; domain?: string; initiative?: string; limit?: string } = {}) =>
+    request<FeedItem[]>('GET', `/feed-items${q(filters)}`),
+  feedItem: (id: number) => request<FeedItem>('GET', `/feed-items/${id}`),
+  setFeedItemState: (id: number, state: FeedItemState) => request<FeedItem>('PATCH', `/feed-items/${id}`, { state }),
+
+  search: (query: string) => request<{ q: string; terms: string[]; hits: SearchHit[] }>('GET', `/search${q({ q: query })}`),
+  askStatus: () => request<{ enabled: boolean }>('GET', '/ask'),
+  ask: (question: string) => request<Answer>('POST', '/ask', { question }),
 
   notes: (filters: { type?: string; domain?: string; region?: string; q?: string; initiative?: string } = {}) =>
     request<Note[]>('GET', `/notes${q(filters)}`),

@@ -11,6 +11,9 @@ os.environ["DESK_DATABASE_URL"] = f"sqlite+aiosqlite:///{_tmp}/test.db"
 os.environ["DESK_SECRET_KEY"] = "test-secret-key-test-secret-key-0123456789"
 os.environ["DESK_COOKIE_SECURE"] = "false"
 os.environ["DESK_ENVIRONMENT"] = "test"
+os.environ["DESK_FEED_INTERVAL_MINUTES"] = "0"
+os.environ["DESK_TIMEZONE"] = "UTC"
+os.environ.pop("DESK_ANTHROPIC_API_KEY", None)
 
 from app import db as dbmod  # noqa: E402
 from app.main import create_app  # noqa: E402

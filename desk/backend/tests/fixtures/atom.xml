@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Example Atom</title>
+<entry><title>Agorá: next phase announced</title><id>tag:example.org,2026:1</id>
+<link rel="alternate" href="/news/agora"/><updated>2026-11-20T08:00:00Z</updated>
+<summary>Seven central banks and tokenised correspondent banking.</summary></entry>
+</feed>

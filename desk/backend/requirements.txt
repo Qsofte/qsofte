@@ -10,3 +10,7 @@ pydantic-settings==2.7.0
 email-validator==2.2.0
 bcrypt==4.2.1
 PyJWT==2.10.1
+httpx==0.28.1        # feed fetching
+defusedxml==0.7.1    # safe RSS/Atom parsing
+tzdata==2026.6       # time zones in the slim image
+anthropic==2.14.0    # Ask: answers from Desk content (optional; needs DESK_ANTHROPIC_API_KEY)

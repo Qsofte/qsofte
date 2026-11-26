@@ -4,6 +4,7 @@ The app shell is served to anyone (it holds no content); every /api route except
 sign-in and health needs a valid session.
 """
 
+import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -12,14 +13,22 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, Res
 from fastapi.staticfiles import StaticFiles
 
 from .config import get_settings
-from .db import dispose
-from .routes import auth, domains, events, notes, today
+from . import feeds
+from .db import dispose, sessionmaker
+from .routes import auth, domains, events, guides, initiatives, notes, search, today
+from .routes import feeds as feed_routes
 from .security import require_write_header
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    s = get_settings()
+    task = None
+    if s.feed_interval_minutes > 0:
+        task = asyncio.create_task(feeds.run_forever(sessionmaker(), s.feed_interval_minutes))
     yield
+    if task:
+        task.cancel()
     await dispose()
 
 
@@ -35,7 +44,7 @@ def create_app() -> FastAPI:
     )
 
     api = APIRouter(prefix="/api", dependencies=[Depends(require_write_header)])
-    for module in (auth, domains, notes, events, today):
+    for module in (auth, domains, initiatives, notes, guides, events, feed_routes, search, today):
         api.include_router(module.router)
     app.include_router(api)
 

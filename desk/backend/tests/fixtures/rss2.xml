@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>Example</title>
+<item><title><![CDATA[HKMA advances Project Ensemble pilot]]></title>
+<link>https://example.org/a</link><guid>a-1</guid>
+<pubDate>Tue, 24 Nov 2026 10:00:00 +0800</pubDate>
+<description><![CDATA[<p>Tokenised deposits settle <b>24/7</b>&nbsp;now.</p><script>bad()</script>]]></description></item>
+<item><title>Annual report on staff canteen</title><link>https://example.org/b</link>
+<pubDate>Mon, 23 Nov 2026 09:00:00 GMT</pubDate><description>Nothing about payments.</description></item>
+<item><title>Ancient history</title><link>https://example.org/c</link>
+<pubDate>Mon, 02 Jan 2023 09:00:00 GMT</pubDate></item>
+<item><title>Bad link</title><link>javascript:alert(1)</link><pubDate>Mon, 23 Nov 2026 09:00:00 GMT</pubDate></item>
+</channel></rss>

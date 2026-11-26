@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..db import get_db
 from ..models import Domain, Initiative, Note, User, utcnow
 from ..rules import position_due
-from ..schemas import DomainDetail, DomainOut, DomainPatch, InitiativeIn, InitiativeOut, InitiativePatch, NoteOut
+from ..schemas import DomainDetail, DomainOut, DomainPatch, InitiativeOut, NoteOut
 from ..security import current_user
 from .common import domain_by_slug, notes_query
 
@@ -66,54 +66,3 @@ async def update_domain(
         d.capability_evidence = body.capability_evidence.strip()
     await db.commit()
     return await _detail(db, d)
-
-
-# ---------- initiatives ----------
-
-
-@router.get("/initiatives", response_model=list[InitiativeOut])
-async def list_initiatives(_: User = Depends(current_user), db: AsyncSession = Depends(get_db)) -> list[InitiativeOut]:
-    rows = await db.execute(
-        select(Initiative, Domain).join(Domain, Initiative.domain_id == Domain.id).order_by(Domain.sort, Initiative.sort)
-    )
-    return [InitiativeOut.of(i, d) for i, d in rows.all()]
-
-
-def _slugify(name: str) -> str:
-    out = "".join(c.lower() if c.isalnum() else "-" for c in name)
-    return "-".join(p for p in out.split("-") if p)[:60] or "initiative"
-
-
-@router.post("/initiatives", response_model=InitiativeOut, status_code=201)
-async def create_initiative(
-    body: InitiativeIn, _: User = Depends(current_user), db: AsyncSession = Depends(get_db)
-) -> InitiativeOut:
-    d = await domain_by_slug(db, body.domain_slug)
-    slug = _slugify(body.name)
-    if await db.scalar(select(Initiative).where(Initiative.slug == slug)):
-        raise HTTPException(status.HTTP_409_CONFLICT, f"An initiative called '{body.name}' already exists.")
-    last = await db.scalar(select(func.max(Initiative.sort)).where(Initiative.domain_id == d.id))
-    i = Initiative(
-        slug=slug, name=body.name, domain_id=d.id, summary=body.summary.strip(),
-        status=body.status, url=body.url, sort=(last or 0) + 1,
-    )
-    db.add(i)
-    await db.commit()
-    return InitiativeOut.of(i, d)
-
-
-@router.patch("/initiatives/{slug}", response_model=InitiativeOut)
-async def update_initiative(
-    slug: str, body: InitiativePatch, _: User = Depends(current_user), db: AsyncSession = Depends(get_db)
-) -> InitiativeOut:
-    i = await db.scalar(select(Initiative).where(Initiative.slug == slug))
-    if i is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, f"There is no initiative called '{slug}'.")
-    for field in ("name", "summary", "status", "url"):
-        value = getattr(body, field)
-        if value is not None:
-            setattr(i, field, value.strip() if isinstance(value, str) else value)
-    await db.commit()
-    d = await db.get(Domain, i.domain_id)
-    assert d is not None
-    return InitiativeOut.of(i, d)

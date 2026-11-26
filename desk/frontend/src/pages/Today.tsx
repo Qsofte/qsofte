@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { api } from '../api';
+import FeedList from '../components/FeedList';
 import NoteList from '../components/NoteList';
 import { copy, showUp } from '../content';
 import { day } from '../format';
@@ -9,6 +10,11 @@ import './Today.css';
 
 export default function TodayPage() {
   const { data, error } = useLoad(api.today, []);
+  const news = useLoad(() => api.feedItems({ state: 'new', limit: '60' }), []).data;
+  const initiatives = useLoad(api.initiatives, []).data ?? [];
+  const names = Object.fromEntries(initiatives.map((i) => [i.slug, i.name]));
+  const weekAgo = Date.now() - 7 * 864e5;
+  const fresh = (news ?? []).filter((i) => i.domain_codes.length && new Date(i.published_at).getTime() >= weekAgo).slice(0, 6);
   usePageTitle(data?.week ?? 'Today');
 
   return (
@@ -35,6 +41,16 @@ export default function TodayPage() {
             ) : (
               <p className="empty">{copy.today.noSignals}</p>
             )}
+          </section>
+
+          <section className="block" aria-labelledby="t-feeds">
+            <h2 id="t-feeds" className="title">
+              {copy.feeds.fromFeeds}
+            </h2>
+            {fresh.length ? <FeedList items={fresh} names={names} compact /> : <p className="empty">{copy.feeds.fromFeedsNone}</p>}
+            <Link to="/feeds" className="link-more">
+              {copy.feeds.title}
+            </Link>
           </section>
 
           <section className="block" aria-labelledby="t-events">

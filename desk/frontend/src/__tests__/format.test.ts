@@ -29,3 +29,18 @@ describe('twelve-month strip', () => {
     expect(monthSlot(null, now)).toBe(-1);
   });
 });
+
+describe('search helpers', () => {
+  it('folds accents and case like the server', async () => {
+    const { fold } = await import('../format');
+    expect(fold('Agorá ÉTÉ')).toBe('agora ete');
+  });
+  it('says how long ago', async () => {
+    const { ago } = await import('../format');
+    const now = new Date('2026-11-26T12:00:00Z');
+    expect(ago('2026-11-26T11:30:00Z', now)).toBe('30 min ago');
+    expect(ago('2026-11-26T09:00:00Z', now)).toBe('3 hours ago');
+    expect(ago('2026-11-24T12:00:00Z', now)).toBe('2 days ago');
+    expect(ago('2026-10-01T12:00:00Z', now)).toBe('1 Oct 2026');
+  });
+});

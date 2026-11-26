@@ -1,0 +1,23 @@
+.guide__tag-link {
+  min-height: var(--tap);
+  padding: 0 var(--space-4);
+  text-decoration: none;
+}
+
+.guide__tag-link:hover {
+  border-color: var(--ink-3);
+}
+
+.guide__status {
+  max-width: var(--measure);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+}
+
+.guide__status--draft {
+  background: var(--warn-surface);
+  color: var(--warn);
+}

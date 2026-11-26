@@ -45,3 +45,20 @@ export function monthSlot(iso: string | null, now = new Date()): number {
   const slot = (y - now.getFullYear()) * 12 + (m - 1 - now.getMonth());
   return slot >= 0 && slot < 12 ? slot : -1;
 }
+
+/** Lower case, accents removed: 'Agorá' -> 'agora'. Matches the server's search folding. */
+export function fold(text: string): string {
+  return text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/** '3 hours ago', '2 days ago', or a date for anything older than a week. */
+export function ago(iso: string, now = new Date()): string {
+  const mins = Math.round((now.getTime() - new Date(iso).getTime()) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  const days = Math.round(hours / 24);
+  if (days <= 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+  return day(iso);
+}

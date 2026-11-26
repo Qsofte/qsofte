@@ -77,20 +77,21 @@ export default function DomainPage() {
             {data.initiatives.map((i) => (
               <li key={i.slug} className="domain__initiative">
                 <div className="domain__initiative-head">
-                  <h3>{i.url ? <a href={i.url} target="_blank" rel="noreferrer">{i.name}</a> : i.name}</h3>
-                  <span className="tag">{initiativeStatus[i.status as keyof typeof initiativeStatus] ?? i.status}</span>
+                  <h3>
+                    <Link to={`/landscape/${i.slug}`}>{i.name}</Link>
+                  </h3>
+                  <span className="tag">{initiativeStatus[i.status]}</span>
                 </div>
                 <p className="muted small">{i.summary}</p>
-                <Link to={`/notes?initiative=${i.slug}`} className="link-more small">
-                  {copy.notes.title}
-                </Link>
               </li>
             ))}
           </ul>
         ) : (
           <p className="empty">{t.noInitiatives}</p>
         )}
-        <AddInitiative slug={slug} onAdded={() => api.domain(slug).then(setData)} />
+        <Link to={`/landscape/new?domain=${slug}`} className="link-more">
+          {t.addInitiative}
+        </Link>
       </section>
 
       <section className="block" aria-labelledby="d-notes">
@@ -178,76 +179,6 @@ function PositionForm({
           {t.save}
         </button>
         <button type="button" className="btn btn--secondary" onClick={onCancel}>
-          {t.cancel}
-        </button>
-      </div>
-    </form>
-  );
-}
-
-function AddInitiative({ slug, onAdded }: { slug: string; onAdded: () => void }) {
-  const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [summary, setSummary] = useState('');
-  const [url, setUrl] = useState('');
-  const [status, setStatus] = useState('research');
-  const [error, setError] = useState<string | null>(null);
-  const t = copy.domain;
-
-  if (!open) {
-    return (
-      <button type="button" className="link-more" onClick={() => setOpen(true)}>
-        {t.addInitiative}
-      </button>
-    );
-  }
-
-  async function submit(e: FormEvent) {
-    e.preventDefault();
-    try {
-      await api.createInitiative({ name, summary, url, status, domain_slug: slug });
-      setOpen(false);
-      setName('');
-      setSummary('');
-      setUrl('');
-      onAdded();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
-    }
-  }
-
-  return (
-    <form className="form domain__add" onSubmit={submit}>
-      <div className="form__row">
-        <label className="field">
-          <span className="field__label">{t.initiativeName}</span>
-          <input id="init-name" className="input" required value={name} onChange={(e) => setName(e.target.value)} />
-        </label>
-        <label className="field">
-          <span className="field__label">{t.initiativeStatus}</span>
-          <select id="init-status" className="input" value={status} onChange={(e) => setStatus(e.target.value)}>
-            {Object.entries(initiativeStatus).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-      <label className="field">
-        <span className="field__label">{t.initiativeSummary}</span>
-        <textarea id="init-summary" className="input" rows={2} value={summary} onChange={(e) => setSummary(e.target.value)} />
-      </label>
-      <label className="field">
-        <span className="field__label">{t.initiativeUrl}</span>
-        <input id="init-url" className="input" type="url" value={url} onChange={(e) => setUrl(e.target.value)} />
-      </label>
-      {error && <p className="error">{error}</p>}
-      <div className="actions">
-        <button type="submit" className="btn btn--secondary" disabled={!name.trim()}>
-          {t.addInitiative}
-        </button>
-        <button type="button" className="link-more" onClick={() => setOpen(false)}>
           {t.cancel}
         </button>
       </div>
